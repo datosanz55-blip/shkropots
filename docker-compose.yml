@@ -1,0 +1,18 @@
+# Вариант деплоя через Dokploy → Compose.
+# Для типа "Application" (Dockerfile) этот файл не нужен — Dokploy соберёт по Dockerfile.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shkropots-web
+    restart: unless-stopped
+    # Внешний порт публикуем на случай прямого доступа без Traefik.
+    # В Dokploy маршрутизацию удобнее вешать на домен через встроенный Traefik.
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

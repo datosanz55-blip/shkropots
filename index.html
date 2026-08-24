@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShkrobotS — уличная мебель на заказ, Челябинск</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap');
+
+  :root{
+    --cream:#f2ede4;
+    --ink:#1c1a17;
+    --wood:#a9642f;
+    --wood-dark:#7a481f;
+    --stone:#8a8478;
+    --line: rgba(28,26,23,0.12);
+    --ease: cubic-bezier(.16,.84,.44,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family:'Unbounded', sans-serif;
+    letter-spacing:-0.02em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 32px;}
+
+  /* ===== SCROLL PROGRESS BAR ===== */
+  .progress-bar{
+    position:fixed; top:0; left:0; height:3px; background:var(--wood);
+    width:0%; z-index:100; transition:width .1s linear;
+  }
+
+  /* ===== REVEAL ANIMATIONS ===== */
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition:opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .reveal-scale{opacity:0; transform:scale(.94);
+    transition:opacity .9s var(--ease), transform .9s var(--ease);}
+  .reveal-scale.in{opacity:1; transform:scale(1);}
+  .stagger > *{opacity:0; transform:translateY(20px); transition:opacity .6s var(--ease), transform .6s var(--ease);}
+  .stagger.in > *{opacity:1; transform:translateY(0);}
+  .stagger.in > *:nth-child(1){transition-delay:.05s;}
+  .stagger.in > *:nth-child(2){transition-delay:.15s;}
+  .stagger.in > *:nth-child(3){transition-delay:.25s;}
+  .stagger.in > *:nth-child(4){transition-delay:.35s;}
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .reveal-scale, .stagger > *{opacity:1 !important; transform:none !important; transition:none !important;}
+  }
+
+  /* ===== HEADER ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(242,237,228,0.86);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    transition:box-shadow .3s ease;
+  }
+  header.scrolled{box-shadow:0 8px 24px rgba(28,26,23,0.06);}
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    max-width:1240px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Unbounded'; font-weight:700; font-size:19px;
+  }
+  .logo .mark{
+    width:34px; height:34px; border-radius:8px;
+    background:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--cream); font-size:16px; font-weight:800;
+    transition:transform .4s var(--ease);
+  }
+  .logo:hover .mark{transform:rotate(-8deg) scale(1.05);}
+  .navlinks{display:flex; gap:36px; font-size:15px; font-weight:500;}
+  .navlinks a{opacity:0.75; transition:opacity .2s; position:relative;}
+  .navlinks a::after{
+    content:''; position:absolute; left:0; bottom:-4px; width:0; height:1.5px;
+    background:var(--wood); transition:width .25s var(--ease);
+  }
+  .navlinks a:hover{opacity:1;}
+  .navlinks a:hover::after{width:100%;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--ink); color:var(--cream);
+    padding:12px 22px; border-radius:100px;
+    font-weight:600; font-size:14px;
+    border:none; cursor:pointer;
+    transition:transform .3s var(--ease), background .3s ease, box-shadow .3s ease;
+    position:relative; overflow:hidden;
+  }
+  .btn:hover{transform:translateY(-2px); background:var(--wood-dark); box-shadow:0 10px 24px rgba(122,72,31,0.28);}
+  .btn:active{transform:translateY(0) scale(.97);}
+  .btn.light{background:var(--cream); color:var(--ink); border:1px solid var(--line);}
+  .btn.light:hover{background:#fff; box-shadow:0 10px 24px rgba(28,26,23,0.12);}
+  .btn svg{width:14px; height:14px; transition:transform .3s var(--ease);}
+  .btn:hover svg{transform:translate(2px,-2px);}
+
+  /* ===== HERO ===== */
+  .hero{padding:56px 0 0; overflow:hidden; position:relative;}
+  .hero-top{
+    display:grid; grid-template-columns: 1.05fr 0.95fr;
+    gap:40px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--wood-dark); margin-bottom:18px;
+  }
+  .eyebrow::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--wood); animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(1.6); opacity:.5;}}
+  .hero h1{
+    font-size:clamp(40px, 5vw, 72px); line-height:0.95; font-weight:800;
+    margin-bottom:22px; white-space:nowrap;
+  }
+  .hero h1 .word{display:inline-block; animation:riseIn .9s var(--ease) both;}
+  .hero h1 .word:nth-child(1){animation-delay:.05s;}
+  .hero h1 .word:nth-child(2){animation-delay:.15s;}
+  @keyframes riseIn{from{opacity:0; transform:translateY(40px) rotate(2deg);} to{opacity:1; transform:translateY(0) rotate(0);}}
+  .hero p.lead{
+    font-size:17px; line-height:1.6; color:var(--stone); max-width:420px; margin-bottom:28px;
+  }
+  .hero-cta{display:flex; align-items:center; gap:20px;}
+  .rating{font-size:14px; font-weight:600;}
+  .rating .stars{color:var(--wood); letter-spacing:2px; display:inline-block;}
+  .rating .stars span{display:inline-block; animation:starPop .5s var(--ease) both;}
+  .rating .stars span:nth-child(1){animation-delay:.5s;}
+  .rating .stars span:nth-child(2){animation-delay:.58s;}
+  .rating .stars span:nth-child(3){animation-delay:.66s;}
+  .rating .stars span:nth-child(4){animation-delay:.74s;}
+  .rating .stars span:nth-child(5){animation-delay:.82s;}
+  @keyframes starPop{from{opacity:0; transform:scale(0) rotate(-40deg);} to{opacity:1; transform:scale(1) rotate(0);}}
+  .rating span.sub{display:block; color:var(--stone); font-weight:500; font-size:13px; margin-top:2px;}
+
+  .hero-image-wrap{position:relative; will-change:transform;}
+  .hero-slider{
+    border-radius:24px; overflow:hidden;
+    aspect-ratio: 4/5;
+    position:relative;
+    box-shadow:0 30px 60px rgba(28,26,23,0.14);
+  }
+  .hero-slides{
+    display:flex; height:100%;
+    transition:transform .7s var(--ease);
+  }
+  .hero-slide{
+    flex:0 0 100%; height:100%; position:relative; cursor:pointer;
+  }
+  .hero-slide img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
+  .hero-slide:hover img{transform:scale(1.05);}
+  .hero-slide .zoom-hint{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(28,26,23,0); transition:background .3s ease; pointer-events:none;
+  }
+  .hero-slide .zoom-hint svg{
+    width:38px; height:38px; opacity:0; transform:scale(.7);
+    transition:opacity .3s ease, transform .3s ease; color:#fff;
+  }
+  .hero-slide:hover .zoom-hint{background:rgba(28,26,23,0.16);}
+  .hero-slide:hover .zoom-hint svg{opacity:1; transform:scale(1);}
+  .hero-slide .slide-caption{
+    position:absolute; left:18px; bottom:18px;
+    background:rgba(28,26,23,0.55); backdrop-filter:blur(6px);
+    color:#fff; padding:8px 14px; border-radius:100px;
+    font-size:12.5px; font-weight:700;
+  }
+  .hero-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,0.85); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; z-index:5;
+    transition:background .25s ease, transform .25s var(--ease);
+    box-shadow:0 8px 18px rgba(28,26,23,0.14);
+  }
+  .hero-nav:hover{background:#fff; transform:translateY(-50%) scale(1.08);}
+  .hero-nav svg{width:16px; height:16px; color:var(--ink);}
+  .hero-nav.prev{left:14px;}
+  .hero-nav.next{right:14px;}
+  .hero-dots{
+    position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+    display:flex; gap:8px; z-index:5;
+  }
+  .hero-dot{
+    width:8px; height:8px; border-radius:50%;
+    background:rgba(255,255,255,0.5); cursor:pointer;
+    transition:width .3s var(--ease), background .3s ease;
+  }
+  .hero-dot.active{width:22px; background:#fff;}
+  .hero-badge-link{
+    position:absolute; top:16px; right:16px; z-index:5;
+    background:var(--cream); border-radius:100px; padding:9px 16px;
+    font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:6px;
+    box-shadow:0 10px 22px rgba(28,26,23,0.16);
+    transition:transform .25s var(--ease);
+  }
+  .hero-badge-link:hover{transform:translateY(-2px);}
+  .hero-badge-link svg{width:11px; height:11px;}
+
+  /* ===== MARQUEE ===== */
+  .marquee{
+    background:var(--ink); color:var(--cream);
+    padding:22px 0; margin-top:80px;
+    overflow:hidden; white-space:nowrap;
+  }
+  .marquee-track{
+    display:inline-flex; gap:40px; animation: scroll 26s linear infinite;
+    font-family:'Unbounded'; font-weight:600; font-size:26px; text-transform:lowercase;
+  }
+  .marquee-track span{display:flex; align-items:center; gap:40px; opacity:0.92;}
+  .marquee-track .dot{color:var(--wood); font-size:18px;}
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{animation:none;}
+  }
+
+  /* ===== COLLECTION (dark) ===== */
+  .collection{
+    background:var(--ink); color:var(--cream);
+    padding:90px 0;
+  }
+  .collection-grid{
+    display:grid; grid-template-columns: 1fr 1.1fr;
+    gap:56px; align-items:center;
+  }
+  .collection-photo{
+    border-radius:20px; overflow:hidden; aspect-ratio:3/4; cursor:pointer;
+  }
+  .collection-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
+  .collection-photo:hover img{transform:scale(1.05);}
+  .collection h2{font-size:44px; font-weight:700; margin-bottom:18px;}
+  .collection p.body{
+    color:rgba(242,237,228,0.66); font-size:15.5px; line-height:1.7; max-width:480px; margin-bottom:32px;
+  }
+  .mini-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:30px;}
+  .mini-card{
+    background:rgba(242,237,228,0.06); border:1px solid rgba(242,237,228,0.12);
+    border-radius:14px; padding:12px; text-align:center;
+    cursor:pointer; transition:transform .3s var(--ease), background .3s ease, border-color .3s ease;
+  }
+  .mini-card:hover{transform:translateY(-4px); background:rgba(242,237,228,0.1); border-color:rgba(169,100,47,0.5);}
+  .mini-card .imgbox{aspect-ratio:1; border-radius:10px; overflow:hidden; margin-bottom:10px; background:rgba(242,237,228,0.08);}
+  .mini-card img{width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease);}
+  .mini-card:hover img{transform:scale(1.08);}
+  .mini-card .name{font-size:12.5px; font-weight:600;}
+  .mini-card .price{font-size:11.5px; color:rgba(242,237,228,0.55); margin-top:2px;}
+
+  /* ===== CALCULATOR ===== */
+  .calc{padding:90px 0; border-bottom:1px solid var(--line);}
+  .calc-head{text-align:center; max-width:560px; margin:0 auto 44px;}
+  .calc-head h2{font-size:38px; font-weight:700; margin-bottom:12px;}
+  .calc-head p{color:var(--stone); font-size:15.5px; line-height:1.6;}
+  .calc-box{
+    background:#fff; border:1px solid var(--line); border-radius:24px;
+    padding:40px; max-width:760px; margin:0 auto;
+    box-shadow:0 30px 60px rgba(28,26,23,0.06);
+  }
+  .calc-row{margin-bottom:28px;}
+  .calc-row label{display:block; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--stone); margin-bottom:14px;}
+  .calc-options{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .calc-opt{
+    border:1.5px solid var(--line); border-radius:12px; padding:14px 10px;
+    text-align:center; font-size:13.5px; font-weight:600; cursor:pointer;
+    transition:all .25s var(--ease); background:var(--cream);
+  }
+  .calc-opt:hover{border-color:var(--wood); transform:translateY(-2px);}
+  .calc-opt.active{background:var(--ink); color:var(--cream); border-color:var(--ink);}
+  .calc-slider-wrap{display:flex; align-items:center; gap:16px;}
+  .calc-slider-wrap input[type=range]{
+    flex:1; -webkit-appearance:none; appearance:none; height:5px; border-radius:100px;
+    background:var(--line); outline:none;
+  }
+  .calc-slider-wrap input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+    background:var(--wood); cursor:pointer; border:4px solid #fff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:transform .2s ease;
+  }
+  .calc-slider-wrap input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15);}
+  .calc-slider-wrap .calc-val{font-weight:700; font-size:15px; min-width:74px; text-align:right;}
+  .calc-result{
+    margin-top:8px; padding-top:28px; border-top:1px dashed var(--line);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  }
+  .calc-result .label{font-size:13px; color:var(--stone); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;}
+  .calc-result .price{font-family:'Unbounded'; font-size:36px; font-weight:700; color:var(--wood-dark); transition:opacity .2s ease;}
+
+  /* ===== CASE STUDIES / INFO STRIP ===== */
+  .strip{padding:90px 0;}
+  .strip-grid{
+    display:grid; grid-template-columns: 1fr 1fr;
+    gap:56px; align-items:start;
+  }
+  .strip h2{font-size:38px; font-weight:700; margin-bottom:26px;}
+  .obj-list{border-top:1px solid var(--line);}
+  .obj-list li{
+    list-style:none;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 4px; border-bottom:1px solid var(--line);
+    font-size:15.5px; font-weight:500;
+    cursor:pointer; transition:padding .25s var(--ease), color .25s ease;
+  }
+  .obj-list li:hover{padding-left:12px; color:var(--wood-dark);}
+  .obj-list li .num{color:var(--stone); font-size:13px; margin-right:14px; font-weight:600;}
+  .obj-list li svg{width:14px; height:14px; opacity:0.4; transition:transform .25s var(--ease), opacity .25s;}
+  .obj-list li:hover svg{opacity:1; transform:translateX(4px);}
+  .strip-photo{border-radius:20px; overflow:hidden; aspect-ratio:1/1; cursor:pointer;}
+  .strip-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
+  .strip-photo:hover img{transform:scale(1.05);}
+
+  /* ===== FEATURED PRODUCTS ===== */
+  .featured{padding:20px 0 100px;}
+  .featured-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:34px;}
+  .featured-head h2{font-size:38px; font-weight:700;}
+  .featured-head a{font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; color:var(--wood-dark);}
+  .products{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .product-card{
+    background:#fff; border:1px solid var(--line); border-radius:18px;
+    overflow:hidden; cursor:pointer;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .product-card:hover{transform:translateY(-8px); box-shadow:0 28px 48px rgba(28,26,23,0.12);}
+  .product-photo{aspect-ratio:4/3; overflow:hidden; position:relative; background:#e9e3d6;}
+  .product-photo img{width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease);}
+  .product-card:hover .product-photo img{transform:scale(1.08);}
+  .product-badge{
+    position:absolute; top:14px; left:14px;
+    background:var(--cream); border-radius:100px; padding:6px 12px;
+    font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .product-info{padding:20px;}
+  .product-info .row{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+  .product-info .name{font-size:16px; font-weight:700;}
+  .product-info .arrow{
+    width:30px; height:30px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    transition:background .25s ease, border-color .25s ease, transform .25s var(--ease);
+  }
+  .product-card:hover .arrow{background:var(--ink); border-color:var(--ink); transform:rotate(45deg);}
+  .product-card:hover .arrow svg{color:var(--cream);}
+  .product-info .arrow svg{width:12px; height:12px; transition:color .25s ease;}
+  .product-info .price{color:var(--wood-dark); font-weight:700; font-size:15px;}
+  .product-info .desc{color:var(--stone); font-size:13px; margin-top:4px;}
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(20,18,15,0.92); z-index:200;
+    display:flex; align-items:center; justify-content:center; padding:40px;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+    backdrop-filter:blur(6px);
+  }
+  .lightbox.open{opacity:1; pointer-events:auto;}
+  .lightbox img{
+    max-width:min(880px,90vw); max-height:82vh; border-radius:14px;
+    transform:scale(.92); transition:transform .35s var(--ease);
+    box-shadow:0 40px 80px rgba(0,0,0,0.5);
+  }
+  .lightbox.open img{transform:scale(1);}
+  .lightbox-close{
+    position:absolute; top:28px; right:32px; width:44px; height:44px; border-radius:50%;
+    background:rgba(242,237,228,0.12); border:1px solid rgba(242,237,228,0.25);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .25s ease, transform .25s ease;
+  }
+  .lightbox-close:hover{background:rgba(242,237,228,0.22); transform:rotate(90deg);}
+  .lightbox-close svg{width:18px; height:18px; color:#fff;}
+
+  /* ===== FLOATING CALL BUTTON (mobile) ===== */
+  .fab-call{
+    display:none; position:fixed; bottom:22px; right:22px; z-index:80;
+    width:58px; height:58px; border-radius:50%;
+    background:var(--wood-dark); color:#fff;
+    align-items:center; justify-content:center;
+    box-shadow:0 12px 28px rgba(122,72,31,0.4);
+    animation:fabPulse 2.4s ease-in-out infinite;
+  }
+  .fab-call svg{width:24px; height:24px;}
+  @keyframes fabPulse{
+    0%,100%{box-shadow:0 12px 28px rgba(122,72,31,0.4);}
+    50%{box-shadow:0 12px 28px rgba(122,72,31,0.4), 0 0 0 10px rgba(122,72,31,0.08);}
+  }
+
+  /* ===== FOOTER / CTA ===== */
+  footer{background:var(--ink); color:var(--cream); padding:80px 0 30px;}
+  .foot-grid{
+    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap:40px; padding-bottom:56px; border-bottom:1px solid rgba(242,237,228,0.12);
+  }
+  .foot-cta h3{font-size:30px; font-weight:700; margin-bottom:14px; max-width:320px;}
+  .foot-cta p{color:rgba(242,237,228,0.6); font-size:14px; margin-bottom:22px; max-width:340px;}
+  .foot-form{display:flex; gap:10px;}
+  .foot-form input{
+    flex:1; background:rgba(242,237,228,0.08); border:1px solid rgba(242,237,228,0.18);
+    border-radius:100px; padding:13px 18px; color:var(--cream); font-size:14px; font-family:inherit;
+    transition:border-color .25s ease, background .25s ease;
+  }
+  .foot-form input:focus{border-color:var(--wood); background:rgba(242,237,228,0.12);}
+  .foot-form input::placeholder{color:rgba(242,237,228,0.45);}
+  .foot-form .btn.sent{background:#4a7a4a;}
+  .foot-col h4{font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:rgba(242,237,228,0.5); margin-bottom:18px; font-weight:700;}
+  .foot-col a{display:block; font-size:14.5px; margin-bottom:12px; color:rgba(242,237,228,0.85); transition:color .2s ease, transform .2s ease; width:fit-content;}
+  .foot-col a:hover{color:var(--wood); transform:translateX(3px);}
+  .foot-bottom{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:26px; font-size:13px; color:rgba(242,237,228,0.5);
+  }
+  .foot-bottom .flogo{font-family:'Unbounded'; font-weight:700; color:var(--cream); font-size:15px;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 860px){
+    .wrap{padding:0 20px;}
+    .nav{padding:16px 20px;}
+    .navlinks{display:none;}
+    .hero{padding:32px 0 0;}
+    .hero-top{grid-template-columns:1fr; gap:36px;}
+    .hero h1{font-size:56px;}
+    .hero-nav{width:32px; height:32px;}
+    .hero-nav.prev{left:10px;}
+    .hero-nav.next{right:10px;}
+    .hero-badge-link{padding:7px 12px; font-size:11px;}
+    .marquee-track{font-size:19px;}
+    .collection-grid{grid-template-columns:1fr; gap:34px;}
+    .collection{padding:64px 0;}
+    .collection h2{font-size:32px;}
+    .calc{padding:64px 0;}
+    .calc-box{padding:26px;}
+    .calc-options{grid-template-columns:1fr 1fr;}
+    .calc-head h2{font-size:30px;}
+    .strip-grid{grid-template-columns:1fr; gap:34px;}
+    .strip{padding:64px 0;}
+    .products{grid-template-columns:1fr; gap:18px;}
+    .featured{padding:10px 0 70px;}
+    .foot-grid{grid-template-columns:1fr 1fr; gap:32px 24px;}
+    .foot-cta{grid-column:1/-1;}
+    .foot-bottom{flex-direction:column; align-items:flex-start; gap:10px;}
+    .fab-call{display:flex;}
+  }
+  @media (max-width: 480px){
+    .hero h1{font-size:42px;}
+    .mini-grid{grid-template-columns:repeat(3,1fr);}
+    .foot-grid{grid-template-columns:1fr;}
+    .foot-form{flex-direction:column;}
+    .calc-result{flex-direction:column; align-items:flex-start;}
+  }
+
+  :focus-visible{outline:2px solid var(--wood); outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header id="siteHeader">
+  <div class="nav">
+    <div class="logo"><span class="mark">S</span>ShkrobotS</div>
+    <nav class="navlinks">
+      <a href="#top">Главная</a>
+      <a href="#collection">Коллекция</a>
+      <a href="#calc">Калькулятор</a>
+      <a href="#products">Товары</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="btn" href="tel:+79227381642">Позвонить
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+    </a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">Уличная мебель на заказ · Челябинск</div>
+        <h1><span class="word">Shkrobot</span><span class="word">S</span></h1>
+        <p class="lead">Собираем мебель для террас, беседок и загородных домов из алюминиевого каркаса и влагостойких тканей. Прочная, долговечная, под ваш размер.</p>
+        <div class="hero-cta">
+          <a class="btn" href="#calc">Рассчитать стоимость
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+          <div class="rating">
+            <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <span class="sub">5,0 · 8 оценок на Я.Картах</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image-wrap" id="heroImageWrap">
+        <div class="hero-slider" id="heroSlider">
+          <div class="hero-slides" id="heroSlides">
+            <div class="hero-slide lightbox-trigger" data-full="images/terrace-pool.jpg">
+              <img src="images/terrace-pool.jpg" alt="Комплект мебели для террасы ShkrobotS у бассейна" loading="eager">
+              <div class="zoom-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+              </div>
+              <span class="slide-caption">Терраса · 185 000 ₽</span>
+            </div>
+            <div class="hero-slide lightbox-trigger" data-full="images/gazebo-tent.jpg">
+              <img src="images/gazebo-tent.jpg" alt="Мебель для беседки под тентом" loading="lazy">
+              <div class="zoom-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+              </div>
+              <span class="slide-caption">Беседка · 250 000 ₽</span>
+            </div>
+            <div class="hero-slide lightbox-trigger" data-full="images/terrace-balcony.jpg">
+              <img src="images/terrace-balcony.jpg" alt="Уличный комплект мебели на заказ" loading="lazy">
+              <div class="zoom-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+              </div>
+              <span class="slide-caption">На заказ · от 173 000 ₽</span>
+            </div>
+          </div>
+          <div class="hero-nav prev" id="heroPrev" aria-label="Предыдущее фото">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="hero-nav next" id="heroNext" aria-label="Следующее фото">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+          <div class="hero-dots" id="heroDots">
+            <div class="hero-dot active" data-i="0"></div>
+            <div class="hero-dot" data-i="1"></div>
+            <div class="hero-dot" data-i="2"></div>
+          </div>
+          <a class="hero-badge-link" href="#products">Все комплекты
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>на заказ <span class="dot">✦</span> под ваш размер <span class="dot">✦</span> алюминий <span class="dot">✦</span> ручная сборка <span class="dot">✦</span></span>
+      <span>на заказ <span class="dot">✦</span> под ваш размер <span class="dot">✦</span> алюминий <span class="dot">✦</span> ручная сборка <span class="dot">✦</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="collection" id="collection">
+  <div class="wrap">
+    <div class="collection-grid">
+      <div class="collection-photo reveal-scale lightbox-trigger" data-full="images/gazebo-tent.jpg">
+        <img src="images/gazebo-tent.jpg" alt="Мебель для беседки ShkrobotS в интерьере" loading="lazy">
+      </div>
+      <div class="reveal">
+        <h2>Коллекция для беседки и террасы</h2>
+        <p class="body">Каждый комплект ShkrobotS собирается вручную из алюминиевого каркаса и влагостойкой обивки — выдерживает морозы, дожди и солнце без потери вида. Работаем под размер вашей веранды или беседки.</p>
+        <div class="mini-grid stagger">
+          <div class="mini-card lightbox-trigger" data-full="images/terrace-pool.jpg">
+            <div class="imgbox"><img src="images/terrace-pool.jpg" alt="Комплект для террасы у бассейна" loading="lazy"></div>
+            <div class="name">Для террасы</div>
+            <div class="price">185 000 ₽</div>
+          </div>
+          <div class="mini-card lightbox-trigger" data-full="images/gazebo-tent.jpg">
+            <div class="imgbox"><img src="images/gazebo-tent.jpg" alt="Комплект для беседки" loading="lazy"></div>
+            <div class="name">Для беседки</div>
+            <div class="price">250 000 ₽</div>
+          </div>
+          <div class="mini-card lightbox-trigger" data-full="images/terrace-balcony.jpg">
+            <div class="imgbox"><img src="images/terrace-balcony.jpg" alt="Комплект для террасы на заказ" loading="lazy"></div>
+            <div class="name">На заказ</div>
+            <div class="price">от 173 000 ₽</div>
+          </div>
+        </div>
+        <a class="btn light" href="#products">Все комплекты
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="calc" id="calc">
+  <div class="wrap">
+    <div class="calc-head reveal">
+      <h2>Посчитайте стоимость комплекта</h2>
+      <p>Ориентировочная цена по типу и размеру — точную смету дадим после замера</p>
+    </div>
+    <div class="calc-box reveal-scale">
+      <div class="calc-row">
+        <label>Тип комплекта</label>
+        <div class="calc-options" id="calcType">
+          <div class="calc-opt active" data-base="173000" data-label="Терраса">Терраса</div>
+          <div class="calc-opt" data-base="250000" data-label="Беседка">Беседка</div>
+          <div class="calc-opt" data-base="140000" data-label="Компактный">Компактный сет</div>
+        </div>
+      </div>
+      <div class="calc-row">
+        <label>Количество посадочных мест</label>
+        <div class="calc-slider-wrap">
+          <input type="range" id="calcSeats" min="4" max="12" value="6" step="1">
+          <span class="calc-val" id="calcSeatsVal">6 мест</span>
+        </div>
+      </div>
+      <div class="calc-row" style="margin-bottom:0;">
+        <label>Обивка</label>
+        <div class="calc-options" id="calcFabric">
+          <div class="calc-opt active" data-mult="1">Стандарт</div>
+          <div class="calc-opt" data-mult="1.15">Влагостойкая+</div>
+          <div class="calc-opt" data-mult="1.3">Премиум</div>
+        </div>
+      </div>
+      <div class="calc-result">
+        <span class="label">Примерная стоимость</span>
+        <span class="price" id="calcPrice">173 000 ₽</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="wrap">
+    <div class="strip-grid">
+      <div class="reveal">
+        <h2>Реализованные объекты</h2>
+        <ul class="obj-list">
+          <li><span><span class="num">01</span>Терраса загородного дома, п. Шершни</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </li>
+          <li><span><span class="num">02</span>Мебель для беседки, деревянный дом</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </li>
+          <li><span><span class="num">03</span>Уличный комплект на заказ, двор ЖК</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </li>
+          <li><span><span class="num">04</span>Обивка и каркас под цвет фасада</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </li>
+        </ul>
+      </div>
+      <div class="strip-photo reveal-scale lightbox-trigger" data-full="images/terrace-balcony.jpg">
+        <img src="images/terrace-balcony.jpg" alt="Готовый объект — терраса с мебелью ShkrobotS" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="featured" id="products">
+  <div class="wrap">
+    <div class="featured-head reveal">
+      <h2>Комплекты в наличии</h2>
+      <a href="tel:+79227381642">Уточнить сроки
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </a>
+    </div>
+    <div class="products stagger">
+
+      <div class="product-card lightbox-trigger" data-full="images/terrace-pool.jpg">
+        <div class="product-photo">
+          <span class="product-badge">Терраса</span>
+          <img src="images/terrace-pool.jpg" alt="Комплект мебели для террасы у бассейна" loading="lazy">
+        </div>
+        <div class="product-info">
+          <div class="row">
+            <span class="name">Комплект для террасы</span>
+            <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg></span>
+          </div>
+          <div class="price">185 000 ₽</div>
+          <div class="desc">Угловой диван + кресло + стол, тёмный алюминий</div>
+        </div>
+      </div>
+
+      <div class="product-card lightbox-trigger" data-full="images/gazebo-tent.jpg">
+        <div class="product-photo">
+          <span class="product-badge">Беседка</span>
+          <img src="images/gazebo-tent.jpg" alt="Комплект мебели для беседки" loading="lazy">
+        </div>
+        <div class="product-info">
+          <div class="row">
+            <span class="name">Комплект для беседки</span>
+            <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg></span>
+          </div>
+          <div class="price">250 000 ₽</div>
+          <div class="desc">Угловой диван с тёмной обивкой и деревянным столом</div>
+        </div>
+      </div>
+
+      <div class="product-card lightbox-trigger" data-full="images/terrace-balcony.jpg">
+        <div class="product-photo">
+          <span class="product-badge">На заказ</span>
+          <img src="images/terrace-balcony.jpg" alt="Уличный комплект мебели на заказ" loading="lazy">
+        </div>
+        <div class="product-info">
+          <div class="row">
+            <span class="name">Уличный комплект на заказ</span>
+            <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg></span>
+          </div>
+          <div class="price">от 173 000 ₽</div>
+          <div class="desc">Размер и обивка — под ваш двор или террасу</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer id="contacts">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-cta reveal">
+        <h3>Обсудим комплект под вашу террасу?</h3>
+        <p>Оставьте телефон — перезвоним и посчитаем стоимость под ваш размер и материалы.</p>
+        <form class="foot-form" id="leadForm">
+          <input type="tel" placeholder="Ваш телефон" required id="leadPhone">
+          <button class="btn" type="submit" id="leadBtn">Отправить</button>
+        </form>
+      </div>
+      <div class="foot-col">
+        <h4>Компания</h4>
+        <a href="#top">О нас</a>
+        <a href="#collection">Коллекция</a>
+        <a href="#products">Комплекты</a>
+      </div>
+      <div class="foot-col">
+        <h4>Контакты</h4>
+        <a href="tel:+79227381642">+7 (922) 738-16-42</a>
+        <a href="#">Северная ул., 52Г, п. Шершни, Челябинск</a>
+        <a href="#">Ежедневно 10:00–20:00</a>
+      </div>
+      <div class="foot-col">
+        <h4>Соцсети</h4>
+        <a href="#">ВКонтакте</a>
+        <a href="#">Написать в чат</a>
+        <a href="#">Я.Карты</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="flogo">ShkrobotS</div>
+      <div>© 2026 ShkrobotS · Уличная мебель на заказ, Челябинск</div>
+    </div>
+  </div>
+</footer>
+
+<a class="fab-call" href="tel:+79227381642" aria-label="Позвонить">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+</a>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lightboxClose">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </div>
+  <img id="lightboxImg" src="" alt="Просмотр фото">
+</div>
+
+<script>
+(function(){
+  // Progress bar
+  var bar = document.getElementById('progressBar');
+  var header = document.getElementById('siteHeader');
+  function onScroll(){
+    var h = document.documentElement;
+    var scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = scrolled + '%';
+    if(h.scrollTop > 12){ header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+
+  // Reveal on scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal, .reveal-scale, .stagger').forEach(function(el){ io.observe(el); });
+
+  // Hero carousel
+  (function(){
+    var slidesWrap = document.getElementById('heroSlides');
+    var slides = document.querySelectorAll('#heroSlides .hero-slide');
+    var dots = document.querySelectorAll('#heroDots .hero-dot');
+    var prevBtn = document.getElementById('heroPrev');
+    var nextBtn = document.getElementById('heroNext');
+    if(!slidesWrap || slides.length === 0) return;
+    var current = 0;
+    var total = slides.length;
+    var autoplayTimer;
+
+    function goTo(i){
+      current = (i + total) % total;
+      slidesWrap.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dots.forEach(function(d, idx){ d.classList.toggle('active', idx === current); });
+    }
+    function next(){ goTo(current + 1); }
+    function prev(){ goTo(current - 1); }
+    function resetAutoplay(){
+      clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(next, 5000);
+    }
+
+    if(nextBtn) nextBtn.addEventListener('click', function(e){ e.stopPropagation(); next(); resetAutoplay(); });
+    if(prevBtn) prevBtn.addEventListener('click', function(e){ e.stopPropagation(); prev(); resetAutoplay(); });
+    dots.forEach(function(d){
+      d.addEventListener('click', function(e){
+        e.stopPropagation();
+        goTo(parseInt(d.getAttribute('data-i')));
+        resetAutoplay();
+      });
+    });
+
+    // Swipe support
+    var startX = 0, deltaX = 0, dragging = false;
+    slidesWrap.addEventListener('touchstart', function(e){
+      startX = e.touches[0].clientX; dragging = true;
+    }, {passive:true});
+    slidesWrap.addEventListener('touchmove', function(e){
+      if(!dragging) return;
+      deltaX = e.touches[0].clientX - startX;
+    }, {passive:true});
+    slidesWrap.addEventListener('touchend', function(){
+      if(!dragging) return;
+      dragging = false;
+      if(deltaX > 40) prev();
+      else if(deltaX < -40) next();
+      deltaX = 0;
+      resetAutoplay();
+    });
+
+    resetAutoplay();
+  })();
+
+  // Subtle parallax tilt on hero image (desktop only)
+  var heroWrap = document.getElementById('heroImageWrap');
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.querySelector('.hero').addEventListener('mousemove', function(e){
+      var r = heroWrap.getBoundingClientRect();
+      var x = (e.clientX - r.left - r.width/2) / r.width;
+      var y = (e.clientY - r.top - r.height/2) / r.height;
+      heroWrap.style.transform = 'perspective(900px) rotateY(' + (x*4) + 'deg) rotateX(' + (-y*4) + 'deg)';
+    });
+    document.querySelector('.hero').addEventListener('mouseleave', function(){
+      heroWrap.style.transform = 'perspective(900px) rotateY(0) rotateX(0)';
+    });
+  }
+
+  // Lightbox
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  document.querySelectorAll('.lightbox-trigger').forEach(function(el){
+    el.addEventListener('click', function(){
+      lightboxImg.src = el.getAttribute('data-full');
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){ if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+
+  // Price calculator
+  var typeEls = document.querySelectorAll('#calcType .calc-opt');
+  var fabricEls = document.querySelectorAll('#calcFabric .calc-opt');
+  var seatsInput = document.getElementById('calcSeats');
+  var seatsVal = document.getElementById('calcSeatsVal');
+  var priceEl = document.getElementById('calcPrice');
+
+  var state = { base:173000, seats:6, mult:1 };
+
+  function formatPrice(n){
+    n = Math.round(n/500)*500;
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+  }
+  function recalc(){
+    var seatFactor = 1 + (state.seats - 6) * 0.09;
+    var total = state.base * seatFactor * state.mult;
+    priceEl.style.opacity = '0.3';
+    setTimeout(function(){
+      priceEl.textContent = formatPrice(total);
+      priceEl.style.opacity = '1';
+    }, 120);
+  }
+  typeEls.forEach(function(el){
+    el.addEventListener('click', function(){
+      typeEls.forEach(function(o){ o.classList.remove('active'); });
+      el.classList.add('active');
+      state.base = parseFloat(el.getAttribute('data-base'));
+      recalc();
+    });
+  });
+  fabricEls.forEach(function(el){
+    el.addEventListener('click', function(){
+      fabricEls.forEach(function(o){ o.classList.remove('active'); });
+      el.classList.add('active');
+      state.mult = parseFloat(el.getAttribute('data-mult'));
+      recalc();
+    });
+  });
+  seatsInput.addEventListener('input', function(){
+    state.seats = parseInt(seatsInput.value);
+    seatsVal.textContent = state.seats + ' мест';
+    recalc();
+  });
+  recalc();
+
+  // Lead form
+  var leadForm = document.getElementById('leadForm');
+  var leadBtn = document.getElementById('leadBtn');
+  leadForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    leadBtn.textContent = 'Отправлено ✓';
+    leadBtn.classList.add('sent');
+    leadBtn.disabled = true;
+  });
+})();
+</script>
+
+</body>
+</html>
