@@ -37,15 +37,17 @@
     overflow-x:hidden;
   }
   /* ===== МРАМОРНЫЙ ФОН =====
-     Процедурный тёмный мрамор (SVG-фильтр), фиксированный за контентом.
-     Прожилки и текстура — из feTurbulence, затемнение — виньеткой сверху. */
-  .stone-bg{position:fixed; inset:0; z-index:-2; background:var(--bg);}
-  .stone-bg svg{width:100%; height:100%; display:block;}
+     Реальное фото тёмного мрамора (images/marble.jpg), фиксированное за
+     контентом; затемнение под текст — виньеткой в ::after. */
+  .stone-bg{
+    position:fixed; inset:0; z-index:-2;
+    background:#141817 url('images/marble.jpg') center center / cover no-repeat;
+  }
   .stone-bg::after{
     content:''; position:absolute; inset:0; pointer-events:none;
     background:
-      radial-gradient(130% 90% at 50% -8%, rgba(20,25,24,0) 0%, rgba(14,18,17,0.34) 58%, rgba(10,13,13,0.62) 100%),
-      linear-gradient(180deg, rgba(12,16,15,0.30), rgba(12,16,15,0.44));
+      radial-gradient(130% 95% at 50% -6%, rgba(18,22,21,0) 0%, rgba(13,17,16,0.30) 60%, rgba(9,12,12,0.58) 100%),
+      linear-gradient(180deg, rgba(11,15,14,0.22), rgba(11,15,14,0.42));
   }
   /* Читаемость светлого текста поверх мрамора */
   .hero-sub, .hero p.lead, .eyebrow,
@@ -530,84 +532,7 @@
 </head>
 <body>
 
-<div class="stone-bg" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
-    <defs>
-      <!-- Базовые диагональные разводы камня (среднесерый) -->
-      <filter id="mBase" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0012 0.0055" numOctaves="6" seed="9" result="n"/>
-        <feColorMatrix in="n" type="saturate" values="0"/>
-        <feComponentTransfer>
-          <feFuncR type="linear" slope="0.52" intercept="0.10"/>
-          <feFuncG type="linear" slope="0.52" intercept="0.115"/>
-          <feFuncB type="linear" slope="0.52" intercept="0.125"/>
-          <feFuncA type="linear" slope="0" intercept="1"/>
-        </feComponentTransfer>
-      </filter>
-      <!-- Светлые сегменты/разводы (screen) -->
-      <filter id="mLight" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0009 0.004" numOctaves="5" seed="33" result="n"/>
-        <feColorMatrix in="n" type="saturate" values="0"/>
-        <feComponentTransfer>
-          <feFuncR type="gamma" amplitude="1" exponent="1.5" offset="0"/>
-          <feFuncG type="gamma" amplitude="1" exponent="1.5" offset="0"/>
-          <feFuncB type="gamma" amplitude="1" exponent="1.5" offset="0"/>
-          <feFuncA type="linear" slope="0.7" intercept="-0.20"/>
-        </feComponentTransfer>
-        <feGaussianBlur stdDeviation="0.7"/>
-      </filter>
-      <!-- Крупные волнистые белые прожилки (screen) -->
-      <filter id="mVein" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="turbulence" baseFrequency="0.0016 0.0075" numOctaves="6" seed="21" result="t"/>
-        <feColorMatrix in="t" type="saturate" values="0"/>
-        <feComponentTransfer>
-          <feFuncA type="gamma" amplitude="1" exponent="3.2" offset="-0.05"/>
-        </feComponentTransfer>
-        <feColorMatrix type="matrix"
-          values="0 0 0 0 0.94
-                  0 0 0 0 0.96
-                  0 0 0 0 0.97
-                  0 0 0 1 0"/>
-        <feGaussianBlur stdDeviation="0.5"/>
-      </filter>
-      <!-- Тёмные жилы/полосы (normal) -->
-      <filter id="mDark" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="turbulence" baseFrequency="0.0014 0.006" numOctaves="6" seed="47" result="t"/>
-        <feColorMatrix in="t" type="saturate" values="0"/>
-        <feComponentTransfer>
-          <feFuncA type="gamma" amplitude="1" exponent="3.6" offset="-0.05"/>
-        </feComponentTransfer>
-        <feColorMatrix type="matrix"
-          values="0 0 0 0 0.05
-                  0 0 0 0 0.06
-                  0 0 0 0 0.06
-                  0 0 0 0.72 0"/>
-      </filter>
-      <!-- Тонкие белые трещинки (screen) -->
-      <filter id="mCrack" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="turbulence" baseFrequency="0.004 0.02" numOctaves="3" seed="61" result="t"/>
-        <feColorMatrix in="t" type="saturate" values="0"/>
-        <feComponentTransfer>
-          <feFuncA type="gamma" amplitude="1" exponent="8" offset="-0.1"/>
-        </feComponentTransfer>
-        <feColorMatrix type="matrix"
-          values="0 0 0 0 0.90
-                  0 0 0 0 0.93
-                  0 0 0 0 0.95
-                  0 0 0 1 0"/>
-      </filter>
-    </defs>
-    <!-- Диагональный поток: оверсайз-прямоугольники под наклоном -->
-    <g transform="rotate(-27 700 450)">
-      <rect x="-1400" y="-1400" width="4200" height="4200" fill="#141817"/>
-      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mBase)"/>
-      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mLight)" opacity="0.5" style="mix-blend-mode:screen"/>
-      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mDark)" opacity="0.7"/>
-      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mVein)" opacity="0.8" style="mix-blend-mode:screen"/>
-      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mCrack)" opacity="0.35" style="mix-blend-mode:screen"/>
-    </g>
-  </svg>
-</div>
+<div class="stone-bg" aria-hidden="true"></div>
 
 <div class="progress-bar" id="progressBar"></div>
 
