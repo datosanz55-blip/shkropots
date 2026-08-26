@@ -44,9 +44,14 @@
   .stone-bg::after{
     content:''; position:absolute; inset:0; pointer-events:none;
     background:
-      radial-gradient(130% 90% at 50% -8%, rgba(20,25,24,0) 0%, rgba(15,19,18,0.30) 60%, rgba(11,14,14,0.60) 100%),
-      linear-gradient(180deg, rgba(13,17,16,0.18), rgba(13,17,16,0.34));
+      radial-gradient(130% 90% at 50% -8%, rgba(20,25,24,0) 0%, rgba(14,18,17,0.34) 58%, rgba(10,13,13,0.62) 100%),
+      linear-gradient(180deg, rgba(12,16,15,0.30), rgba(12,16,15,0.44));
   }
+  /* Читаемость светлого текста поверх мрамора */
+  .hero-sub, .hero p.lead, .eyebrow,
+  .calc-head h2, .calc-head p,
+  .strip h2, .obj-list li,
+  .featured-head h2{ text-shadow:0 2px 16px rgba(8,10,10,0.6); }
   h1,h2,h3, .display{
     font-family:'Unbounded', system-ui, sans-serif;
     letter-spacing:-0.02em;
@@ -163,12 +168,14 @@
   .hero-giant{
     display:block; width:100%; margin:0; line-height:0;
     animation:heroRise 1.1s var(--ease) both;
-    filter:drop-shadow(0 12px 44px rgba(0,0,0,0.45));
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,0.22)) drop-shadow(0 16px 46px rgba(0,0,0,0.5));
   }
   .hero-giant svg{display:block; width:100%; height:auto; overflow:visible;}
   .hero-giant text{
     font-family:'Unbounded', system-ui, sans-serif; font-weight:800;
-    letter-spacing:-0.02em; fill:url(#giantGrad);
+    letter-spacing:-0.02em;
+    fill:url(#giantGrad);
+    stroke:rgba(255,255,255,0.5); stroke-width:1.1px; paint-order:stroke;
   }
   @keyframes heroRise{from{opacity:0; transform:translateY(34px);} to{opacity:1; transform:translateY(0);}}
   .hero-sub{
@@ -526,76 +533,79 @@
 <div class="stone-bg" aria-hidden="true">
   <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
     <defs>
-      <!-- Облачная база камня: серый из luminance-шума, тёмный холодный диапазон -->
-      <filter id="mBase" x="0" y="0" width="100%" height="100%" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0035 0.0075" numOctaves="6" seed="9" result="n"/>
+      <!-- Базовые диагональные разводы камня (среднесерый) -->
+      <filter id="mBase" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0012 0.0055" numOctaves="6" seed="9" result="n"/>
         <feColorMatrix in="n" type="saturate" values="0"/>
         <feComponentTransfer>
-          <feFuncR type="linear" slope="0.30" intercept="0.075"/>
-          <feFuncG type="linear" slope="0.30" intercept="0.092"/>
-          <feFuncB type="linear" slope="0.30" intercept="0.10"/>
+          <feFuncR type="linear" slope="0.52" intercept="0.10"/>
+          <feFuncG type="linear" slope="0.52" intercept="0.115"/>
+          <feFuncB type="linear" slope="0.52" intercept="0.125"/>
           <feFuncA type="linear" slope="0" intercept="1"/>
         </feComponentTransfer>
       </filter>
-      <!-- Светлые разводы мрамора (screen) -->
-      <filter id="mLight" x="0" y="0" width="100%" height="100%" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0026 0.0052" numOctaves="5" seed="33" result="n"/>
+      <!-- Светлые сегменты/разводы (screen) -->
+      <filter id="mLight" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0009 0.004" numOctaves="5" seed="33" result="n"/>
         <feColorMatrix in="n" type="saturate" values="0"/>
         <feComponentTransfer>
-          <feFuncR type="gamma" amplitude="1" exponent="1.7" offset="0"/>
-          <feFuncG type="gamma" amplitude="1" exponent="1.7" offset="0"/>
-          <feFuncB type="gamma" amplitude="1" exponent="1.7" offset="0"/>
-          <feFuncA type="linear" slope="0.55" intercept="-0.16"/>
+          <feFuncR type="gamma" amplitude="1" exponent="1.5" offset="0"/>
+          <feFuncG type="gamma" amplitude="1" exponent="1.5" offset="0"/>
+          <feFuncB type="gamma" amplitude="1" exponent="1.5" offset="0"/>
+          <feFuncA type="linear" slope="0.7" intercept="-0.20"/>
         </feComponentTransfer>
-        <feGaussianBlur stdDeviation="0.6"/>
+        <feGaussianBlur stdDeviation="0.7"/>
       </filter>
-      <!-- Тонкие серебряные прожилки (screen) -->
-      <filter id="mVein" x="0" y="0" width="100%" height="100%" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feTurbulence type="turbulence" baseFrequency="0.006 0.015" numOctaves="7" seed="21" result="t"/>
+      <!-- Крупные волнистые белые прожилки (screen) -->
+      <filter id="mVein" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="turbulence" baseFrequency="0.0016 0.0075" numOctaves="6" seed="21" result="t"/>
         <feColorMatrix in="t" type="saturate" values="0"/>
         <feComponentTransfer>
-          <feFuncA type="gamma" amplitude="1" exponent="4.5" offset="-0.06"/>
+          <feFuncA type="gamma" amplitude="1" exponent="3.2" offset="-0.05"/>
         </feComponentTransfer>
         <feColorMatrix type="matrix"
-          values="0 0 0 0 0.88
-                  0 0 0 0 0.92
-                  0 0 0 0 0.95
+          values="0 0 0 0 0.94
+                  0 0 0 0 0.96
+                  0 0 0 0 0.97
                   0 0 0 1 0"/>
         <feGaussianBlur stdDeviation="0.5"/>
       </filter>
-      <!-- Тёмные жилы (normal, поверх) -->
-      <filter id="mDark" x="0" y="0" width="100%" height="100%" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feTurbulence type="turbulence" baseFrequency="0.0045 0.011" numOctaves="6" seed="47" result="t"/>
+      <!-- Тёмные жилы/полосы (normal) -->
+      <filter id="mDark" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="turbulence" baseFrequency="0.0014 0.006" numOctaves="6" seed="47" result="t"/>
         <feColorMatrix in="t" type="saturate" values="0"/>
         <feComponentTransfer>
-          <feFuncA type="gamma" amplitude="1" exponent="5" offset="-0.02"/>
+          <feFuncA type="gamma" amplitude="1" exponent="3.6" offset="-0.05"/>
         </feComponentTransfer>
         <feColorMatrix type="matrix"
-          values="0 0 0 0 0.04
-                  0 0 0 0 0.05
-                  0 0 0 0 0.05
-                  0 0 0 0.8 0"/>
+          values="0 0 0 0 0.05
+                  0 0 0 0 0.06
+                  0 0 0 0 0.06
+                  0 0 0 0.72 0"/>
       </filter>
-      <!-- Редкие тёплые нити (screen, очень слабо) -->
-      <filter id="mWarm" x="0" y="0" width="100%" height="100%" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feTurbulence type="turbulence" baseFrequency="0.007 0.017" numOctaves="6" seed="5" result="t"/>
+      <!-- Тонкие белые трещинки (screen) -->
+      <filter id="mCrack" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="turbulence" baseFrequency="0.004 0.02" numOctaves="3" seed="61" result="t"/>
         <feColorMatrix in="t" type="saturate" values="0"/>
         <feComponentTransfer>
-          <feFuncA type="gamma" amplitude="1" exponent="6" offset="-0.04"/>
+          <feFuncA type="gamma" amplitude="1" exponent="8" offset="-0.1"/>
         </feComponentTransfer>
         <feColorMatrix type="matrix"
-          values="0 0 0 0 0.72
-                  0 0 0 0 0.52
-                  0 0 0 0 0.28
-                  0 0 0 0.5 0"/>
+          values="0 0 0 0 0.90
+                  0 0 0 0 0.93
+                  0 0 0 0 0.95
+                  0 0 0 1 0"/>
       </filter>
     </defs>
-    <rect width="100%" height="100%" fill="#121615"/>
-    <rect width="100%" height="100%" filter="url(#mBase)"/>
-    <rect width="100%" height="100%" filter="url(#mLight)" opacity="0.42" style="mix-blend-mode:screen"/>
-    <rect width="100%" height="100%" filter="url(#mDark)" opacity="0.85"/>
-    <rect width="100%" height="100%" filter="url(#mVein)" opacity="0.55" style="mix-blend-mode:screen"/>
-    <rect width="100%" height="100%" filter="url(#mWarm)" opacity="0.5" style="mix-blend-mode:screen"/>
+    <!-- Диагональный поток: оверсайз-прямоугольники под наклоном -->
+    <g transform="rotate(-27 700 450)">
+      <rect x="-1400" y="-1400" width="4200" height="4200" fill="#141817"/>
+      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mBase)"/>
+      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mLight)" opacity="0.5" style="mix-blend-mode:screen"/>
+      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mDark)" opacity="0.7"/>
+      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mVein)" opacity="0.8" style="mix-blend-mode:screen"/>
+      <rect x="-1400" y="-1400" width="4200" height="4200" filter="url(#mCrack)" opacity="0.35" style="mix-blend-mode:screen"/>
+    </g>
   </svg>
 </div>
 
@@ -623,9 +633,9 @@
       <svg viewBox="0 0 1000 172" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
         <defs>
           <linearGradient id="giantGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ffffff"/>
-            <stop offset="0.55" stop-color="#d7dedd"/>
-            <stop offset="1" stop-color="#a6b0ae"/>
+            <stop offset="0" stop-color="#ffffff" stop-opacity="0.74"/>
+            <stop offset="0.5" stop-color="#eaf2f3" stop-opacity="0.34"/>
+            <stop offset="1" stop-color="#c4d0d0" stop-opacity="0.18"/>
           </linearGradient>
         </defs>
         <text x="500" y="132" text-anchor="middle" textLength="988" lengthAdjust="spacingAndGlyphs" font-size="150">SHKROBOTS</text>
