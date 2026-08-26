@@ -15,15 +15,15 @@
     --surface:#1a201f;     /* приподнятые секции/карточки */
     --surface-2:#212928;   /* вложенные панели, hover */
     --footer:#0f1413;      /* почти чёрный — якорь низа */
-    --ink:#eef2f1;         /* основной текст (холодный near-white) */
-    --muted:#9aa8a4;       /* вторичный текст */
-    --faint:#69736f;       /* номера, подписи */
-    --line:rgba(255,255,255,0.09);
-    --line-strong:rgba(255,255,255,0.17);
-    --brass:#c3d9dd;       /* ледяной акцент — кнопки, ключевая эмфаза */
-    --brass-bright:#e6f1f3;/* яркий ледяной — цены, эмфаза на тёмном */
-    --brass-deep:#9bb8bd;  /* глубокий ледяной — градиенты, линии */
-    --on-brass:#131b1b;    /* текст на ледяном */
+    --ink:#efe9e0;         /* основной текст — тёплый айвори (под мрамор) */
+    --muted:#b3a998;       /* вторичный текст — тёплый серо-бежевый */
+    --faint:#7d7466;       /* номера, подписи */
+    --line:rgba(255,250,242,0.10);
+    --line-strong:rgba(255,250,242,0.18);
+    --brass:#d8bf98;       /* тёплый шампань — кнопки, ключевая эмфаза */
+    --brass-bright:#eeddbf;/* яркий тёплый — цены, эмфаза на тёмном */
+    --brass-deep:#b7996e;  /* глубокий тёплый — градиенты, линии */
+    --on-brass:#211a10;    /* тёмный тёплый текст на акценте */
     --ok:#7dc48a;          /* успех (форма отправлена) */
     --ease: cubic-bezier(.16,.84,.44,1);
   }
@@ -112,7 +112,7 @@
     background:linear-gradient(145deg, var(--brass-bright), var(--brass-deep));
     display:flex; align-items:center; justify-content:center;
     color:var(--on-brass); font-size:16px; font-weight:800;
-    box-shadow:0 4px 14px rgba(150,190,200,0.28);
+    box-shadow:0 4px 14px rgba(200,165,110,0.28);
     transition:transform .4s var(--ease);
   }
   .logo:hover .mark{transform:rotate(-8deg) scale(1.05);}
@@ -134,7 +134,7 @@
     transition:transform .3s var(--ease), box-shadow .3s ease, filter .3s ease;
     position:relative; overflow:hidden;
   }
-  .btn:hover{transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 12px 26px rgba(150,190,200,0.32);}
+  .btn:hover{transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 12px 26px rgba(200,165,110,0.32);}
   .btn:active{transform:translateY(0) scale(.97);}
   .btn.light{
     background:var(--surface-2); color:var(--ink);
@@ -150,7 +150,7 @@
   .hero::before{
     content:''; position:absolute; top:-160px; right:-120px;
     width:520px; height:520px; border-radius:50%;
-    background:radial-gradient(circle, rgba(150,190,200,0.10), transparent 66%);
+    background:radial-gradient(circle, rgba(200,165,110,0.10), transparent 66%);
     pointer-events:none; z-index:0;
   }
   .hero .wrap{position:relative; z-index:1;}
@@ -170,14 +170,14 @@
   .hero-giant{
     display:block; width:100%; margin:0; line-height:0;
     animation:heroRise 1.1s var(--ease) both;
-    filter:drop-shadow(0 1px 0 rgba(255,255,255,0.22)) drop-shadow(0 16px 46px rgba(0,0,0,0.5));
+    filter:drop-shadow(0 1px 0 rgba(255,246,232,0.20)) drop-shadow(0 16px 46px rgba(0,0,0,0.5));
   }
   .hero-giant svg{display:block; width:100%; height:auto; overflow:visible;}
   .hero-giant text{
     font-family:'Unbounded', system-ui, sans-serif; font-weight:800;
     letter-spacing:-0.02em;
     fill:url(#giantGrad);
-    stroke:rgba(255,255,255,0.5); stroke-width:1.1px; paint-order:stroke;
+    stroke:rgba(255,248,236,0.4); stroke-width:0.8px; paint-order:stroke;
   }
   @keyframes heroRise{from{opacity:0; transform:translateY(34px);} to{opacity:1; transform:translateY(0);}}
   .hero-sub{
@@ -316,7 +316,7 @@
     border-radius:14px; padding:12px; text-align:center;
     cursor:pointer; transition:transform .3s var(--ease), background .3s ease, border-color .3s ease;
   }
-  .mini-card:hover{transform:translateY(-4px); background:#2a2f35; border-color:rgba(150,190,200,0.55);}
+  .mini-card:hover{transform:translateY(-4px); background:#2a2f35; border-color:rgba(200,165,110,0.55);}
   .mini-card .imgbox{aspect-ratio:1; border-radius:10px; overflow:hidden; margin-bottom:10px; background:#2a2f35;}
   .mini-card img{width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease);}
   .mini-card:hover img{transform:scale(1.08);}
@@ -455,13 +455,13 @@
     width:58px; height:58px; border-radius:50%;
     background:linear-gradient(145deg, var(--brass-bright), var(--brass-deep)); color:var(--on-brass);
     align-items:center; justify-content:center;
-    box-shadow:0 12px 28px rgba(150,190,200,0.4);
+    box-shadow:0 12px 28px rgba(200,165,110,0.4);
     animation:fabPulse 2.4s ease-in-out infinite;
   }
   .fab-call svg{width:24px; height:24px;}
   @keyframes fabPulse{
-    0%,100%{box-shadow:0 12px 28px rgba(150,190,200,0.4);}
-    50%{box-shadow:0 12px 28px rgba(150,190,200,0.4), 0 0 0 10px rgba(150,190,200,0.1);}
+    0%,100%{box-shadow:0 12px 28px rgba(200,165,110,0.4);}
+    50%{box-shadow:0 12px 28px rgba(200,165,110,0.4), 0 0 0 10px rgba(200,165,110,0.1);}
   }
 
   /* ===== FOOTER / CTA ===== */
@@ -558,9 +558,9 @@
       <svg viewBox="0 0 1000 172" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
         <defs>
           <linearGradient id="giantGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ffffff" stop-opacity="0.74"/>
-            <stop offset="0.5" stop-color="#eaf2f3" stop-opacity="0.34"/>
-            <stop offset="1" stop-color="#c4d0d0" stop-opacity="0.18"/>
+            <stop offset="0" stop-color="#fdf8f0" stop-opacity="0.96"/>
+            <stop offset="0.5" stop-color="#e8dbc4" stop-opacity="0.85"/>
+            <stop offset="1" stop-color="#cbb597" stop-opacity="0.74"/>
           </linearGradient>
         </defs>
         <text x="500" y="132" text-anchor="middle" textLength="988" lengthAdjust="spacingAndGlyphs" font-size="150">SHKROBOTS</text>
