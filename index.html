@@ -4,6 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShkrobotS — лофт-мебель на заказ, Челябинск</title>
+<meta name="description" content="ShkrobotS Loft Studio — мебель в стиле лофт на заказ в Челябинске: металлокаркас и массив натурального дерева. Столы, стеллажи, кровати, а также мягкая мебель, обивка и пошив подушек. Работаем по вашим размерам.">
+<meta name="theme-color" content="#15120f">
+
+<!-- ВАЖНО: ЗАМЕНИТЬ https://shkrobots.ru/ на реальный домен после подключения в Dokploy.
+     От этого зависят canonical и превью ссылки в мессенджерах. -->
+<link rel="canonical" href="https://shkrobots.ru/">
+
+<!-- Превью при отправке ссылки в WhatsApp / Telegram / ВК -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ShkrobotS Loft Studio">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="ShkrobotS — лофт-мебель на заказ, Челябинск">
+<meta property="og:description" content="Мебель в стиле лофт: металлокаркас и массив натурального дерева. Плюс мягкая мебель, обивка и пошив подушек. По вашим размерам.">
+<meta property="og:url" content="https://shkrobots.ru/">
+<meta property="og:image" content="https://shkrobots.ru/images/logo.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="548">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/logo.jpg">
+
+<!-- Микроразметка для Яндекса и Google: карточка локального бизнеса -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FurnitureStore",
+  "name": "ShkrobotS Loft Studio",
+  "description": "Мебель в стиле лофт на заказ: металлокаркас и массив натурального дерева. Мягкая мебель, обивка и пошив подушек.",
+  "url": "https://shkrobots.ru/",
+  "image": "https://shkrobots.ru/images/logo.jpg",
+  "telephone": "+7-922-738-16-42",
+  "priceRange": "₽₽",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Северная ул., 52Г, п. Шершни",
+    "addressLocality": "Челябинск",
+    "addressRegion": "Челябинская область",
+    "addressCountry": "RU"
+  },
+  "areaServed": "Челябинск и Челябинская область",
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "10:00",
+    "closes": "20:00"
+  }]
+}
+</script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
@@ -140,6 +189,44 @@
     transition:opacity .3s var(--ease);
   }
   .logo:hover .logo-img{opacity:0.85;}
+  /* ===== БУРГЕР И МОБИЛЬНОЕ МЕНЮ ===== */
+  .burger{
+    display:none; /* включается в мобильной медиа-запросе */
+    flex-direction:column; justify-content:center; gap:5px;
+    width:44px; height:44px; padding:0 10px;
+    background:none; border:none; cursor:pointer; flex:none;
+  }
+  .burger span{
+    display:block; height:2px; width:100%; border-radius:2px;
+    background:var(--ink);
+    transition:transform .3s var(--ease), opacity .2s ease;
+  }
+  .burger.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .burger.is-open span:nth-child(2){opacity:0;}
+  .burger.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{
+    display:none; /* включается в мобильной медиа-запросе */
+    position:absolute; top:100%; left:0; right:0; z-index:49;
+    flex-direction:column;
+    background:rgba(16,13,11,0.97);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 18px 40px rgba(0,0,0,0.5);
+    max-height:0; overflow:hidden; opacity:0; visibility:hidden;
+    transition:max-height .35s var(--ease), opacity .25s ease,
+               visibility .25s ease, padding .35s var(--ease);
+  }
+  .mobile-menu.open{max-height:80vh; opacity:1; visibility:visible; padding:8px 20px 22px;}
+  .mobile-menu a{
+    font-size:17px; font-weight:500; color:var(--ink);
+    padding:14px 2px; border-bottom:1px solid var(--line);
+  }
+  .mobile-menu a:last-of-type{border-bottom:none;}
+  .mobile-menu .btn{margin-top:16px; justify-content:center;}
+  @media (prefers-reduced-motion: reduce){
+    .mobile-menu{transition:none;}
+    .burger span{transition:none;}
+  }
   .navlinks{display:flex; gap:36px; font-size:15px; font-weight:500;}
   .navlinks a{color:var(--ink); opacity:0.7; transition:opacity .2s; position:relative;}
   .navlinks a::after{
@@ -518,6 +605,9 @@
     .nav{padding:16px 20px;}
     .logo-img{height:42px;}
     .navlinks{display:none;}
+    .burger{display:flex;}
+    .mobile-menu{display:flex;}
+    .nav > .btn{display:none;}      /* звонок остаётся в меню и в плавающей кнопке */
     .hero{padding:48px 0 0;}
     .hero-top{grid-template-columns:1fr; gap:36px;}
     .hero-sub{font-size:38px;}
@@ -574,7 +664,21 @@
     <a class="btn" href="tel:+79227381642">Позвонить
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
     </a>
+    <button class="burger" id="burger" type="button"
+            aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильное меню">
+    <a href="#top">О студии</a>
+    <a href="#collection">Изделия</a>
+    <a href="#calc">Калькулятор</a>
+    <a href="#products">Работы</a>
+    <a href="#contacts">Контакты</a>
+    <a class="btn" href="tel:+79227381642">Позвонить
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+    </a>
+  </nav>
 </header>
 
 <section class="hero" id="top">
@@ -871,6 +975,34 @@
     if(h.scrollTop > 12){ header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
   }
   document.addEventListener('scroll', onScroll, {passive:true});
+
+  // Мобильное меню
+  (function(){
+    var burger = document.getElementById('burger');
+    var menu = document.getElementById('mobileMenu');
+    if(!burger || !menu) return;
+
+    function setMenu(open){
+      menu.classList.toggle('open', open);
+      burger.classList.toggle('is-open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    }
+    burger.addEventListener('click', function(){
+      setMenu(!menu.classList.contains('open'));
+    });
+    // закрываем после перехода по якорю
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ setMenu(false); });
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') setMenu(false);
+    });
+    // если вернулись на десктоп — сбрасываем состояние
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 860) setMenu(false);
+    });
+  })();
 
   // Reveal on scroll
   var io = new IntersectionObserver(function(entries){
