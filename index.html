@@ -161,6 +161,8 @@
   .stagger.in > *:nth-child(2){transition-delay:.15s;}
   .stagger.in > *:nth-child(3){transition-delay:.25s;}
   .stagger.in > *:nth-child(4){transition-delay:.35s;}
+  .stagger.in > *:nth-child(5){transition-delay:.45s;}
+  .stagger.in > *:nth-child(6){transition-delay:.55s;}
   @media (prefers-reduced-motion: reduce){
     .reveal, .reveal-scale, .stagger > *{opacity:1 !important; transform:none !important; transition:none !important;}
   }
@@ -405,32 +407,36 @@
     background:rgba(24,30,29,0.80); color:var(--ink); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
     padding:90px 0;
   }
-  .collection-grid{
-    display:grid; grid-template-columns: 1fr 1.1fr;
-    gap:56px; align-items:center;
-  }
-  .collection-photo{
-    border-radius:20px; overflow:hidden; aspect-ratio:3/4; cursor:pointer;
-    border:1px solid var(--line);
-  }
-  .collection-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
-  .collection-photo:hover img{transform:scale(1.05);}
   .collection h2{font-size:44px; font-weight:700; margin-bottom:18px; color:var(--ink);}
   .collection p.body{
-    color:var(--muted); font-size:15.5px; line-height:1.7; max-width:480px; margin-bottom:32px;
+    color:var(--muted); font-size:15.5px; line-height:1.7; max-width:640px; margin-bottom:0;
   }
-  .mini-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:30px;}
-  .mini-card{
-    background:var(--surface-2); border:1px solid var(--line);
-    border-radius:14px; padding:12px; text-align:center;
-    cursor:pointer; transition:transform .3s var(--ease), background .3s ease, border-color .3s ease;
+  /* ===== СЕТКА КАТЕГОРИЙ ИЗДЕЛИЙ ===== */
+  .cat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:38px;}
+  .cat-tile{display:block;}
+  .cat-photo{
+    display:block; aspect-ratio:1; overflow:hidden; border-radius:8px;
+    border:1px solid var(--line); background:var(--surface-2);
   }
-  .mini-card:hover{transform:translateY(-4px); background:#2a2f35; border-color:rgba(200,165,110,0.55);}
-  .mini-card .imgbox{aspect-ratio:1; border-radius:10px; overflow:hidden; margin-bottom:10px; background:#2a2f35;}
-  .mini-card img{width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease);}
-  .mini-card:hover img{transform:scale(1.08);}
-  .mini-card .name{font-size:12.5px; font-weight:600; color:var(--ink);}
-  .mini-card .price{font-size:11.5px; color:var(--brass-bright); margin-top:2px; font-weight:600;}
+  .cat-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
+  .cat-tile:hover img{transform:scale(1.06);}
+  /* Заглушка, пока фото категории не прислали: текстура, а не «фото изделия» */
+  .cat-photo.is-empty{
+    background:var(--surface-2) url('images/wood.jpg') center / cover;
+    filter:grayscale(0.45) brightness(0.5);
+  }
+  .cat-tile:nth-child(2) .is-empty{background-position:20% 30%;}
+  .cat-tile:nth-child(3) .is-empty{background-position:75% 60%;}
+  .cat-tile:nth-child(4) .is-empty{background-position:40% 80%;}
+  .cat-tile:nth-child(5) .is-empty{background-position:85% 20%;}
+  .cat-tile:nth-child(6) .is-empty{background-position:10% 70%;}
+  .cat-name{
+    display:block; margin-top:14px; text-align:center;
+    font-family:'Jost', system-ui, sans-serif; font-weight:600; font-size:15px;
+    text-transform:uppercase; letter-spacing:0.06em; color:var(--ink);
+    transition:color .25s ease;
+  }
+  .cat-tile:hover .cat-name{color:var(--brass-bright);}
 
   /* ===== CALCULATOR ===== */
   .calc{padding:90px 0; border-bottom:1px solid var(--line);}
@@ -616,7 +622,7 @@
     .hero-nav.next{right:10px;}
     .hero-badge-link{padding:7px 12px; font-size:11px;}
     .marquee-track{font-size:19px;}
-    .collection-grid{grid-template-columns:1fr; gap:34px;}
+    .cat-grid{grid-template-columns:1fr 1fr; gap:18px;}
     .collection{padding:64px 0;}
     .collection h2{font-size:32px;}
     .calc{padding:64px 0;}
@@ -634,7 +640,7 @@
   }
   @media (max-width: 480px){
     .hero-sub{font-size:32px;}
-    .mini-grid{grid-template-columns:repeat(3,1fr);}
+    .cat-grid{grid-template-columns:1fr;}
     .foot-grid{grid-template-columns:1fr;}
     .foot-form{flex-direction:column;}
     .calc-result{flex-direction:column; align-items:flex-start;}
@@ -758,34 +764,35 @@
 
 <section class="collection wood-panel" id="collection">
   <div class="wrap">
-    <div class="collection-grid">
-      <div class="collection-photo reveal-scale lightbox-trigger" data-full="images/gazebo-tent.jpg">
-        <img src="images/gazebo-tent.jpg" alt="Мебель для беседки ShkrobotS в интерьере" loading="lazy">
-      </div>
-      <div class="reveal">
-        <h2>Мебель из массива и металла</h2>
-        <p class="body">Собираем мебель в стиле лофт: металлокаркас и массив натурального дерева — столы, стеллажи, кровати, кухни. Отдельное направление — мягкая мебель: обивка и пошив подушек. Каждое изделие делаем вручную под ваши размеры.</p>
-        <div class="mini-grid stagger">
-          <div class="mini-card lightbox-trigger" data-full="images/terrace-pool.jpg">
-            <div class="imgbox"><img src="images/terrace-pool.jpg" alt="Комплект для террасы у бассейна" loading="lazy"></div>
-            <div class="name">Для террасы</div>
-            <div class="price">185 000 ₽</div>
-          </div>
-          <div class="mini-card lightbox-trigger" data-full="images/gazebo-tent.jpg">
-            <div class="imgbox"><img src="images/gazebo-tent.jpg" alt="Комплект для беседки" loading="lazy"></div>
-            <div class="name">Для беседки</div>
-            <div class="price">250 000 ₽</div>
-          </div>
-          <div class="mini-card lightbox-trigger" data-full="images/terrace-balcony.jpg">
-            <div class="imgbox"><img src="images/terrace-balcony.jpg" alt="Комплект для террасы на заказ" loading="lazy"></div>
-            <div class="name">На заказ</div>
-            <div class="price">от 173 000 ₽</div>
-          </div>
-        </div>
-        <a class="btn light" href="#products">Все работы
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </a>
-      </div>
+    <div class="reveal">
+      <h2>Наши изделия</h2>
+      <p class="body">Собираем мебель в стиле лофт: металлокаркас и массив натурального дерева — столы, стеллажи, кровати, консоли. Отдельное направление — мягкая мебель: обивка и пошив подушек. Каждое изделие делаем вручную под ваши размеры.</p>
+    </div>
+    <div class="cat-grid stagger">
+      <a class="cat-tile" href="#calc">
+        <span class="cat-photo is-empty" aria-hidden="true"></span>
+        <span class="cat-name">Столы</span>
+      </a>
+      <a class="cat-tile" href="#calc">
+        <span class="cat-photo is-empty" aria-hidden="true"></span>
+        <span class="cat-name">Стеллажи</span>
+      </a>
+      <a class="cat-tile" href="#calc">
+        <span class="cat-photo is-empty" aria-hidden="true"></span>
+        <span class="cat-name">Кровати</span>
+      </a>
+      <a class="cat-tile" href="#calc">
+        <span class="cat-photo is-empty" aria-hidden="true"></span>
+        <span class="cat-name">Консоли</span>
+      </a>
+      <a class="cat-tile" href="#calc">
+        <span class="cat-photo is-empty" aria-hidden="true"></span>
+        <span class="cat-name">Мягкая мебель</span>
+      </a>
+      <a class="cat-tile" href="#calc">
+        <span class="cat-photo is-empty" aria-hidden="true"></span>
+        <span class="cat-name">Рабочие зоны</span>
+      </a>
     </div>
   </div>
 </section>
