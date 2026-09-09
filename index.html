@@ -85,39 +85,52 @@
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
   }
-  /* ===== КАМЕННЫЙ ФОН =====
-     Фото тёмного камня (images/stone.jpg), фиксированное за контентом;
-     затемнение под текст — виньеткой в ::after. */
-  .stone-bg{
+  /* ===== ФОНОВЫЕ ТЕКСТУРЫ =====
+     Два варианта оформления, переключаются атрибутом data-tex на <html>.
+       Вариант 1 (по умолчанию): тёмный металл — фон страницы,
+                                 ржавый кортен — акцентные секции.
+       Вариант 2: наоборот.
+     Затемнение задано отдельно для каждого варианта: кортен яркий
+     и активный, под текстом его нужно гасить заметно сильнее металла. */
+  :root{
+    --tex-bg:url('images/metal.jpg');
+    --tex-accent:url('images/rust.jpg');
+    --dim-bg-mid:0.14;  --dim-bg-end:0.34;  --dim-bg-flat:0.18;
+    --dim-acc-a:0.78;   --dim-acc-b:0.88;
+  }
+  :root[data-tex="2"]{
+    --tex-bg:url('images/rust.jpg');
+    --tex-accent:url('images/metal.jpg');
+    --dim-bg-mid:0.46;  --dim-bg-end:0.68;  --dim-bg-flat:0.42;
+    --dim-acc-a:0.58;   --dim-acc-b:0.72;
+  }
+  .page-bg{
     position:fixed; inset:0; z-index:-2;
-    /* Слои: фото камня; если файла ещё нет — ниже процедурный фолбэк */
     background:
-      url('images/stone.jpg') center center / cover no-repeat,
-      radial-gradient(120% 80% at 25% 15%, rgba(92,86,78,0.22), transparent 60%),
-      radial-gradient(100% 90% at 80% 70%, rgba(70,66,60,0.18), transparent 62%),
+      var(--tex-bg) center center / cover no-repeat,
       linear-gradient(160deg, #1b1714 0%, #14100e 55%, #100d0b 100%);
   }
-  /* ===== ДЕРЕВЯННЫЕ АКЦЕНТНЫЕ СЕКЦИИ ===== */
-  .wood-panel{
-    position:relative;
-    /* Слои: фото массива; если файла ещё нет — полосы «доски» как фолбэк */
+  .page-bg::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
     background:
-      url('images/wood.jpg') center / cover,
-      repeating-linear-gradient(90deg, rgba(0,0,0,0.16) 0 2px, rgba(255,255,255,0.015) 2px 9px),
+      radial-gradient(130% 95% at 50% -6%, rgba(0,0,0,0) 0%,
+                      rgba(0,0,0,var(--dim-bg-mid)) 62%,
+                      rgba(0,0,0,var(--dim-bg-end)) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,var(--dim-bg-flat)));
+  }
+  /* ===== АКЦЕНТНЫЕ СЕКЦИИ ===== */
+  .accent-panel{
+    position:relative;
+    background:
+      var(--tex-accent) center / cover,
       linear-gradient(180deg, #2e2117 0%, #241a12 60%, #1b130d 100%);
   }
-  .wood-panel::before{
+  .accent-panel::before{
     content:''; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(180deg, rgba(18,12,8,0.74), rgba(14,9,6,0.84));
+    background:linear-gradient(180deg, rgba(12,9,7,var(--dim-acc-a)), rgba(10,7,5,var(--dim-acc-b)));
   }
-  .wood-panel > *{position:relative; z-index:1;}
-  .stone-bg::after{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:
-      radial-gradient(130% 95% at 50% -6%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.14) 62%, rgba(0,0,0,0.34) 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.18));
-  }
-  /* Читаемость светлого текста поверх камня */
+  .accent-panel > *{position:relative; z-index:1;}
+  /* Читаемость светлого текста поверх текстуры */
   .hero-sub, .hero p.lead, .eyebrow, .hero-facts li,
   .calc-head h2, .calc-head p,
   .strip h2, .obj-list li,
@@ -422,7 +435,7 @@
   .cat-tile:hover img{transform:scale(1.06);}
   /* Заглушка, пока фото категории не прислали: текстура, а не «фото изделия» */
   .cat-photo.is-empty{
-    background:var(--surface-2) url('images/wood.jpg') center / cover;
+    background:var(--surface-2) var(--tex-accent) center / cover;
     filter:grayscale(0.45) brightness(0.5);
   }
   .cat-tile:nth-child(2) .is-empty{background-position:20% 30%;}
@@ -651,7 +664,7 @@
 </head>
 <body>
 
-<div class="stone-bg" aria-hidden="true"></div>
+<div class="page-bg" aria-hidden="true"></div>
 
 <div class="progress-bar" id="progressBar"></div>
 
@@ -762,7 +775,7 @@
   </div>
 </section>
 
-<section class="collection wood-panel" id="collection">
+<section class="collection accent-panel" id="collection">
   <div class="wrap">
     <div class="reveal">
       <h2>Наши изделия</h2>
@@ -922,7 +935,7 @@
   </div>
 </section>
 
-<footer class="wood-panel" id="contacts">
+<footer class="accent-panel" id="contacts">
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-cta reveal">
