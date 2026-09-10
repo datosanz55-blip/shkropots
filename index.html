@@ -86,23 +86,14 @@
     overflow-x:hidden;
   }
   /* ===== ФОНОВЫЕ ТЕКСТУРЫ =====
-     Два варианта оформления, переключаются атрибутом data-tex на <html>.
-       Вариант 1 (по умолчанию): тёмный металл — фон страницы,
-                                 ржавый кортен — акцентные секции.
-       Вариант 2: наоборот.
-     Затемнение задано отдельно для каждого варианта: кортен яркий
-     и активный, под текстом его нужно гасить заметно сильнее металла. */
+     Тёмный царапаный металл — фон страницы, массив дерева — акцентные
+     секции. Затемнение вынесено в переменные --dim-*, чтобы подстраивать
+     контраст под текстуру, не трогая правила. */
   :root{
     --tex-bg:url('images/metal.jpg');
-    --tex-accent:url('images/rust.jpg');
+    --tex-accent:url('images/wood.jpg');
     --dim-bg-mid:0.14;  --dim-bg-end:0.34;  --dim-bg-flat:0.18;
     --dim-acc-a:0.78;   --dim-acc-b:0.88;
-  }
-  :root[data-tex="2"]{
-    --tex-bg:url('images/rust.jpg');
-    --tex-accent:url('images/metal.jpg');
-    --dim-bg-mid:0.46;  --dim-bg-end:0.68;  --dim-bg-flat:0.42;
-    --dim-acc-a:0.58;   --dim-acc-b:0.72;
   }
   .page-bg{
     position:fixed; inset:0; z-index:-2;
@@ -242,7 +233,7 @@
     .mobile-menu{transition:none;}
     .burger span{transition:none;}
   }
-  .navlinks{display:flex; gap:36px; font-size:15px; font-weight:500;}
+  .navlinks{display:flex; gap:26px; font-size:15px; font-weight:500;}
   .navlinks a{color:var(--ink); opacity:0.7; transition:opacity .2s; position:relative;}
   .navlinks a::after{
     content:''; position:absolute; left:0; bottom:-4px; width:0; height:1.5px;
@@ -554,6 +545,72 @@
   .product-info .price{color:var(--brass-bright); font-weight:700; font-size:15px; font-variant-numeric:tabular-nums;}
   .product-info .desc{color:var(--muted); font-size:13px; margin-top:4px;}
 
+  /* ===== ОТЗЫВЫ ===== */
+  .reviews{padding:100px 0;}
+  .rev-head{text-align:center; max-width:620px; margin:0 auto 20px;}
+  .rev-head h2{font-size:clamp(30px,3.6vw,42px); font-weight:700; margin-bottom:14px; color:var(--ink);}
+  /* Сводка рейтинга — единственный проверяемый факт в блоке */
+  .rev-score{
+    display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;
+    margin:0 auto 44px; padding:18px 26px; width:fit-content;
+    background:rgba(28,24,20,0.78); border:1px solid var(--line-strong); border-radius:12px;
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  }
+  .rev-score .num{font-family:'Jost'; font-weight:700; font-size:40px; line-height:1; color:var(--brass-bright);}
+  .rev-score .stars{color:var(--brass-bright); letter-spacing:3px; font-size:15px;}
+  .rev-score .cap{font-size:13.5px; color:var(--muted); margin-top:4px;}
+  .rev-score a{color:var(--brass-bright); border-bottom:1px solid rgba(238,221,191,0.4);}
+  .rev-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; align-items:start;}
+  .rev-card{
+    background:rgba(28,24,20,0.80); border:1px solid var(--line); border-radius:12px;
+    padding:22px; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    transition:transform .3s var(--ease), border-color .3s ease;
+  }
+  .rev-card:hover{transform:translateY(-4px); border-color:var(--line-strong);}
+  .rev-top{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+  .rev-ava{
+    width:40px; height:40px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(145deg, var(--brass-bright), var(--brass-deep));
+    color:var(--on-brass); font-family:'Jost'; font-weight:700; font-size:16px;
+  }
+  .rev-who{min-width:0;}
+  .rev-name{font-size:14.5px; font-weight:700; color:var(--ink);}
+  .rev-date{font-size:12px; color:var(--faint); margin-top:2px;}
+  .rev-card .stars{color:var(--brass-bright); letter-spacing:2px; font-size:13px; margin-bottom:10px;}
+  .rev-text{font-size:14px; line-height:1.65; color:var(--muted);}
+
+  /* ===== НОВОСТИ ===== */
+  .news{padding:100px 0;}
+  .news-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:38px;}
+  .news-head h2{font-size:clamp(30px,3.6vw,42px); font-weight:700; color:var(--ink);}
+  .news-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .news-card{
+    background:rgba(28,24,20,0.82); border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; display:flex; flex-direction:column;
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s ease;
+  }
+  .news-card:hover{transform:translateY(-6px); box-shadow:0 24px 44px rgba(0,0,0,0.5); border-color:var(--line-strong);}
+  .news-photo{aspect-ratio:16/10; overflow:hidden; background:var(--surface-2);}
+  .news-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
+  .news-card:hover .news-photo img{transform:scale(1.06);}
+  /* Пока изображения новости нет — текстурная заглушка, а не пустой прямоугольник */
+  .news-photo.is-empty{background:var(--surface-2) var(--tex-accent) center / cover; filter:grayscale(0.4) brightness(0.55);}
+  .news-body{padding:20px 22px 22px; display:flex; flex-direction:column; flex:1;}
+  .news-title{font-family:'Jost'; font-weight:600; font-size:18px; line-height:1.25; color:var(--ink); margin-bottom:10px;}
+  .news-text{font-size:14px; line-height:1.6; color:var(--muted); margin-bottom:16px;}
+  .news-date{margin-top:auto; font-size:12px; letter-spacing:0.06em; color:var(--faint); font-variant-numeric:tabular-nums;}
+
+  @media (max-width:860px){
+    .reviews,.news{padding:64px 0;}
+    .rev-grid,.news-grid{grid-template-columns:1fr 1fr; gap:18px;}
+    .news-head{flex-direction:column; align-items:flex-start; gap:16px;}
+  }
+  @media (max-width:560px){
+    .rev-grid,.news-grid{grid-template-columns:1fr;}
+  }
+
   /* ===== LIGHTBOX ===== */
   .lightbox{
     position:fixed; inset:0; background:rgba(8,9,10,0.92); z-index:200;
@@ -678,6 +735,8 @@
       <a href="#collection">Изделия</a>
       <a href="#calc">Калькулятор</a>
       <a href="#products">Работы</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#news">Новости</a>
       <a href="#contacts">Контакты</a>
     </nav>
     <a class="btn" href="tel:+79227381642">Позвонить
@@ -693,6 +752,8 @@
     <a href="#collection">Изделия</a>
     <a href="#calc">Калькулятор</a>
     <a href="#products">Работы</a>
+    <a href="#reviews">Отзывы</a>
+    <a href="#news">Новости</a>
     <a href="#contacts">Контакты</a>
     <a class="btn" href="tel:+79227381642">Позвонить
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
@@ -931,6 +992,101 @@
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- ===== ОТЗЫВЫ =====
+     Сводка рейтинга — реальная (5,0 при 8 оценках на Я.Картах).
+     Карточки ниже — ЗАГЛУШКИ: реальных текстов отзывов у нас нет.
+     Заменить на дословные отзывы с Я.Карт либо подключить виджет
+     Яндекса по ID организации. Выдуманные отзывы не размещать. -->
+<section class="reviews accent-panel" id="reviews">
+  <div class="wrap">
+    <div class="rev-head reveal">
+      <h2>Отзывы</h2>
+    </div>
+    <div class="rev-score reveal">
+      <div class="num">5,0</div>
+      <div>
+        <div class="stars" aria-hidden="true">★★★★★</div>
+        <div class="cap">8 оценок · <a href="#" rel="noopener">Яндекс.Карты</a></div>
+      </div>
+    </div>
+    <div class="rev-grid stagger">
+      <article class="rev-card">
+        <div class="rev-top">
+          <span class="rev-ava" aria-hidden="true">К</span>
+          <div class="rev-who">
+            <div class="rev-name">Имя клиента</div>
+            <div class="rev-date">дд.мм.гггг</div>
+          </div>
+        </div>
+        <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
+        <p class="rev-text">Место для реального отзыва с Яндекс.Карт.</p>
+      </article>
+      <article class="rev-card">
+        <div class="rev-top">
+          <span class="rev-ava" aria-hidden="true">К</span>
+          <div class="rev-who">
+            <div class="rev-name">Имя клиента</div>
+            <div class="rev-date">дд.мм.гггг</div>
+          </div>
+        </div>
+        <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
+        <p class="rev-text">Место для реального отзыва с Яндекс.Карт.</p>
+      </article>
+      <article class="rev-card">
+        <div class="rev-top">
+          <span class="rev-ava" aria-hidden="true">К</span>
+          <div class="rev-who">
+            <div class="rev-name">Имя клиента</div>
+            <div class="rev-date">дд.мм.гггг</div>
+          </div>
+        </div>
+        <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
+        <p class="rev-text">Место для реального отзыва с Яндекс.Карт.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== НОВОСТИ =====
+     Карточки — ЗАГЛУШКИ. Реальных новостей студии у нас нет:
+     заголовки, тексты, даты и фото подставить от клиента. -->
+<section class="news" id="news">
+  <div class="wrap">
+    <div class="news-head reveal">
+      <h2>Новости</h2>
+      <a class="btn light" href="tel:+79227381642">Задать вопрос
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </a>
+    </div>
+    <div class="news-grid stagger">
+      <article class="news-card">
+        <div class="news-photo is-empty" aria-hidden="true"></div>
+        <div class="news-body">
+          <h3 class="news-title">Заголовок новости</h3>
+          <p class="news-text">Короткое описание — две-три строки о событии, акции или новом изделии.</p>
+          <div class="news-date">дд.мм.гггг</div>
+        </div>
+      </article>
+      <article class="news-card">
+        <div class="news-photo is-empty" aria-hidden="true"></div>
+        <div class="news-body">
+          <h3 class="news-title">Заголовок новости</h3>
+          <p class="news-text">Короткое описание — две-три строки о событии, акции или новом изделии.</p>
+          <div class="news-date">дд.мм.гггг</div>
+        </div>
+      </article>
+      <article class="news-card">
+        <div class="news-photo is-empty" aria-hidden="true"></div>
+        <div class="news-body">
+          <h3 class="news-title">Заголовок новости</h3>
+          <p class="news-text">Короткое описание — две-три строки о событии, акции или новом изделии.</p>
+          <div class="news-date">дд.мм.гггг</div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
