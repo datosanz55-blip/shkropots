@@ -124,7 +124,7 @@
   /* Читаемость светлого текста поверх текстуры */
   .hero-sub, .hero p.lead, .eyebrow, .hero-facts li,
   .calc-head h2, .calc-head p,
-  .strip h2, .obj-list li,
+  .strip h2, .about-text,
   .featured-head h2,
   .collection h2, .collection p.body,
   .foot-cta h3, .foot-cta p{ text-shadow:0 2px 16px rgba(8,10,10,0.6); }
@@ -385,25 +385,31 @@
   .hero-badge-link:hover{transform:translateY(-2px); background:rgba(28,31,35,0.92);}
   .hero-badge-link svg{width:11px; height:11px; color:var(--brass-bright);}
 
-  /* ===== MARQUEE ===== */
-  .marquee{
-    background:rgba(26,32,31,0.86); color:var(--ink); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
-    padding:22px 0; margin-top:80px;
+  /* ===== МАНИФЕСТ (три ключевых утверждения) ===== */
+  .manifesto{
+    background:rgba(26,22,18,0.86); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-    overflow:hidden; white-space:nowrap;
+    margin-top:80px; padding:52px 0;
   }
-  .marquee-track{
-    display:inline-flex; gap:40px; animation: scroll 26s linear infinite;
-    font-family:'Jost'; font-weight:600; font-size:26px; text-transform:lowercase;
+  .man-grid{display:grid; grid-template-columns:repeat(3,1fr);}
+  .man-item{padding:4px 36px; border-left:1px solid var(--line);}
+  .man-item:first-child{border-left:none; padding-left:0;}
+  .man-item:last-child{padding-right:0;}
+  .man-item p{
+    font-family:'Jost', system-ui, sans-serif; font-weight:600;
+    font-size:clamp(19px, 2vw, 28px); line-height:1.15;
+    text-transform:uppercase; letter-spacing:-0.005em; color:var(--ink);
+    text-wrap:balance;
   }
-  .marquee-track span{display:flex; align-items:center; gap:40px; opacity:0.9;}
-  .marquee-track .dot{color:var(--brass); font-size:18px;}
-  @keyframes scroll{
-    from{transform:translateX(0);}
-    to{transform:translateX(-50%);}
+  .man-item .num{
+    display:block; font-family:'Jost'; font-weight:700; font-size:12px;
+    letter-spacing:0.12em; color:var(--brass); margin-bottom:14px;
   }
-  @media (prefers-reduced-motion: reduce){
-    .marquee-track{animation:none;}
+  @media (max-width:860px){
+    .manifesto{margin-top:56px; padding:40px 0;}
+    .man-grid{grid-template-columns:1fr; gap:28px;}
+    .man-item{padding:0 0 28px; border-left:none; border-bottom:1px solid var(--line);}
+    .man-item:last-child{padding-bottom:0; border-bottom:none;}
   }
 
   /* ===== COLLECTION (приподнятая графитовая секция) ===== */
@@ -492,19 +498,15 @@
     display:grid; grid-template-columns: 1fr 1fr;
     gap:56px; align-items:start;
   }
+  .about-text{font-size:15.5px; line-height:1.7; color:var(--muted); margin-bottom:16px; max-width:520px;}
+  .about-text:last-of-type{margin-bottom:28px;}
   .strip h2{font-size:38px; font-weight:700; margin-bottom:26px; color:var(--ink);}
-  .obj-list{border-top:1px solid var(--line);}
-  .obj-list li{
     list-style:none;
     display:flex; align-items:center; justify-content:space-between;
     padding:20px 4px; border-bottom:1px solid var(--line);
     font-size:15.5px; font-weight:500; color:var(--ink);
     cursor:pointer; transition:padding .25s var(--ease), color .25s ease;
   }
-  .obj-list li:hover{padding-left:12px; color:var(--brass-bright);}
-  .obj-list li .num{color:var(--faint); font-size:13px; margin-right:14px; font-weight:600; font-variant-numeric:tabular-nums;}
-  .obj-list li svg{width:14px; height:14px; opacity:0.4; transition:transform .25s var(--ease), opacity .25s;}
-  .obj-list li:hover svg{opacity:1; transform:translateX(4px);}
   .strip-photo{border-radius:20px; overflow:hidden; aspect-ratio:1/1; cursor:pointer; border:1px solid var(--line);}
   .strip-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
   .strip-photo:hover img{transform:scale(1.05);}
@@ -691,7 +693,6 @@
     .hero-nav.prev{left:10px;}
     .hero-nav.next{right:10px;}
     .hero-badge-link{padding:7px 12px; font-size:11px;}
-    .marquee-track{font-size:19px;}
     .cat-grid{grid-template-columns:1fr 1fr; gap:18px;}
     .collection{padding:64px 0;}
     .collection h2{font-size:32px;}
@@ -731,7 +732,7 @@
       <img class="logo-img" src="images/logo.jpg" alt="ShkrobotS — Loft Studio">
     </a>
     <nav class="navlinks">
-      <a href="#top">О студии</a>
+      <a href="#about">О компании</a>
       <a href="#collection">Изделия</a>
       <a href="#calc">Калькулятор</a>
       <a href="#products">Работы</a>
@@ -748,7 +749,7 @@
     </button>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильное меню">
-    <a href="#top">О студии</a>
+    <a href="#about">О компании</a>
     <a href="#collection">Изделия</a>
     <a href="#calc">Калькулятор</a>
     <a href="#products">Работы</a>
@@ -765,14 +766,14 @@
   <div class="wrap">
     <div class="hero-top">
       <div>
-        <div class="eyebrow">Лофт-студия мебели · Челябинск</div>
-        <h1 class="hero-sub">Металл.<br>Массив.<br>Мягкость.</h1>
-        <p class="lead">Мастерская <span class="brandmark"><span class="cap">S</span>hkrobot<span class="cap">S</span></span> делает мебель в стиле лофт на заказ: металлокаркас и массив натурального дерева. Плюс мягкая мебель — обивка и пошив подушек. Всё под ваши размеры.</p>
+        <div class="eyebrow">Мебель в стиле лофт · Челябинск</div>
+        <h1 class="hero-sub">Создаём настроение вашего дома.</h1>
+        <p class="lead"><span class="brandmark"><span class="cap">S</span>hkrobot<span class="cap">S</span></span> — запатентованный бренд мебели в стиле лофт с собственным производством в Челябинске. Мы создаём не просто мебель.</p>
         <ul class="hero-facts">
-          <li>Металлокаркас и массив дерева</li>
-          <li>Мягкая мебель и обивка</li>
-          <li>По вашим размерам</li>
-          <li>Челябинск и область</li>
+          <li>Собственное производство</li>
+          <li>Производство полного цикла</li>
+          <li>Только порошковая окраска</li>
+          <li>Любой размер и цвет</li>
         </ul>
         <div class="hero-cta">
           <a class="btn" href="#calc">Рассчитать стоимость
@@ -828,10 +829,13 @@
     </div>
   </div>
 
-  <div class="marquee">
-    <div class="marquee-track">
-      <span>на заказ <span class="dot">✦</span> массив дерева <span class="dot">✦</span> металлокаркас <span class="dot">✦</span> ручная работа <span class="dot">✦</span></span>
-      <span>на заказ <span class="dot">✦</span> массив дерева <span class="dot">✦</span> металлокаркас <span class="dot">✦</span> ручная работа <span class="dot">✦</span></span>
+  <div class="manifesto">
+    <div class="wrap">
+      <div class="man-grid stagger">
+        <div class="man-item"><span class="num">01</span><p>Создаём мебель с характером.</p></div>
+        <div class="man-item"><span class="num">02</span><p>Качество, которое служит годами.</p></div>
+        <div class="man-item"><span class="num">03</span><p>От эскиза до готового изделия.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -840,7 +844,7 @@
   <div class="wrap">
     <div class="reveal">
       <h2>Наши изделия</h2>
-      <p class="body">Собираем мебель в стиле лофт: металлокаркас и массив натурального дерева — столы, стеллажи, кровати, консоли. Отдельное направление — мягкая мебель: обивка и пошив подушек. Каждое изделие делаем вручную под ваши размеры.</p>
+      <p class="body">Мы предлагаем мебель разнообразного дизайна и обширной цветовой гаммы. Вы всегда можете заказать мебель от производителя, исходя из своих предпочтений и пожеланий. Изделия изготавливаются только из качественных материалов, используется только порошковая окраска. Производство полного цикла.</p>
     </div>
     <div class="cat-grid stagger">
       <a class="cat-tile" href="#calc">
@@ -910,28 +914,20 @@
   </div>
 </section>
 
-<section class="strip">
+<section class="strip" id="about">
   <div class="wrap">
     <div class="strip-grid">
       <div class="reveal">
-        <h2>Реализованные объекты</h2>
-        <ul class="obj-list">
-          <li><span><span class="num">01</span>Терраса загородного дома, п. Шершни</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-          </li>
-          <li><span><span class="num">02</span>Мебель для беседки, деревянный дом</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-          </li>
-          <li><span><span class="num">03</span>Уличный комплект на заказ, двор ЖК</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-          </li>
-          <li><span><span class="num">04</span>Обивка и каркас под цвет фасада</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-          </li>
-        </ul>
+        <h2>О компании</h2>
+        <p class="about-text">Наша компания специализируется на изготовлении мебели в стиле лофт.</p>
+        <p class="about-text">Нашу мебель хочется гладить, рассматривать, показывать друзьям и гордиться тем, что она у вас есть! Именно такой подход делает стиль лофт таким неповторимым и изысканным.</p>
+        <p class="about-text">Вы всегда можете заказать мебель от производителя, исходя из своих предпочтений и пожеланий — <span class="brandmark"><span class="cap">S</span>hkrobot<span class="cap">S</span></span> работает полным циклом на собственном производстве в Челябинске.</p>
+        <a class="btn" href="#calc">Рассчитать стоимость
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+        </a>
       </div>
       <div class="strip-photo reveal-scale lightbox-trigger" data-full="images/terrace-balcony.jpg">
-        <img src="images/terrace-balcony.jpg" alt="Готовый объект — терраса с мебелью ShkrobotS" loading="lazy">
+        <img src="images/terrace-balcony.jpg" alt="Работа мастерской ShkrobotS" loading="lazy">
       </div>
     </div>
   </div>
@@ -1104,7 +1100,7 @@
       </div>
       <div class="foot-col">
         <h4>Компания</h4>
-        <a href="#top">О нас</a>
+        <a href="#about">О компании</a>
         <a href="#collection">Коллекция</a>
         <a href="#products">Работы</a>
       </div>
