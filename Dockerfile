@@ -8,7 +8,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Статика сайта.
-COPY index.html /usr/share/nginx/html/index.html
+COPY index.html catalog.html styles.css catalog-data.js catalog.js /usr/share/nginx/html/
 COPY images/ /usr/share/nginx/html/images/
 
 EXPOSE 80

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог мебели в стиле лофт — ShkrobotS, Челябинск</title>
+<meta name="description" content="Каталог мебели в стиле лофт от производителя ShkrobotS: столы, кровати, стеллажи, шкафы, кухни, мебель для офиса и HoReCa. Собственное производство в Челябинске, любой размер и цвет.">
+<meta name="theme-color" content="#15120f">
+<!-- ВАЖНО: заменить домен после подключения в Dokploy -->
+<link rel="canonical" href="https://shkrobots.ru/catalog.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ShkrobotS Loft Studio">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Каталог мебели в стиле лофт — ShkrobotS">
+<meta property="og:description" content="Столы, кровати, стеллажи, шкафы, кухни, мебель для офиса и HoReCa. Собственное производство в Челябинске.">
+<meta property="og:url" content="https://shkrobots.ru/catalog.html">
+<meta property="og:image" content="https://shkrobots.ru/images/logo.jpg">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page-bg" aria-hidden="true"></div>
+
+<header id="siteHeader">
+  <div class="nav">
+    <a class="logo" href="index.html" aria-label="ShkrobotS — Loft Studio">
+      <img class="logo-img" src="images/logo.jpg" alt="ShkrobotS — Loft Studio">
+    </a>
+    <nav class="navlinks">
+      <a href="index.html#about">О компании</a>
+      <a href="catalog.html">Каталог</a>
+      <a href="index.html#calc">Калькулятор</a>
+      <a href="index.html#reviews">Отзывы</a>
+      <a href="index.html#news">Новости</a>
+      <a href="index.html#contacts">Контакты</a>
+    </nav>
+    <a class="btn" href="tel:+79227381642">Позвонить
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+    </a>
+    <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильное меню">
+    <a href="index.html#about">О компании</a>
+    <a href="catalog.html">Каталог</a>
+    <a href="index.html#calc">Калькулятор</a>
+    <a href="index.html#reviews">Отзывы</a>
+    <a href="index.html#news">Новости</a>
+    <a href="index.html#contacts">Контакты</a>
+    <a class="btn" href="tel:+79227381642">Позвонить
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+    </a>
+  </nav>
+</header>
+
+<section class="cat-hero">
+  <div class="wrap">
+    <div class="eyebrow">Производство полного цикла · Челябинск</div>
+    <h1>Каталог</h1>
+    <p>Любое изделие делаем под ваш размер и цвет — порошковая окраска, массив дерева и металлокаркас. Выберите категорию или посмотрите всё сразу.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="cat-filter" id="catFilter" role="group" aria-label="Фильтр по категориям"></div>
+  <div class="cat-count" id="catCount"></div>
+</div>
+
+<main class="cat-list">
+  <div class="wrap">
+    <div id="catResults"></div>
+  </div>
+</main>
+
+<footer class="accent-panel" id="contacts">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-cta">
+        <h3>Обсудим ваше изделие?</h3>
+        <p>Оставьте телефон — перезвоним, поможем с замером и посчитаем стоимость под ваш размер и материалы.</p>
+        <form class="foot-form" id="leadForm">
+          <input type="tel" placeholder="Ваш телефон" required id="leadPhone">
+          <button class="btn" type="submit" id="leadBtn">Отправить</button>
+        </form>
+      </div>
+      <div class="foot-col">
+        <h4>Компания</h4>
+        <a href="index.html#about">О компании</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="index.html#calc">Калькулятор</a>
+      </div>
+      <div class="foot-col">
+        <h4>Контакты</h4>
+        <a href="tel:+79227381642">+7 (922) 738-16-42</a>
+        <a href="#">Северная ул., 52Г, п. Шершни, Челябинск</a>
+        <a href="#">Ежедневно 10:00–20:00</a>
+      </div>
+      <div class="foot-col">
+        <h4>Соцсети</h4>
+        <a href="#">ВКонтакте</a>
+        <a href="#">Написать в чат</a>
+        <a href="#">Я.Карты</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="flogo brandmark"><span class="cap">S</span>hkrobot<span class="cap">S</span></div>
+      <div>© 2026 ShkrobotS · Лофт-студия мебели, Челябинск</div>
+    </div>
+  </div>
+</footer>
+
+<a class="fab-call" href="tel:+79227381642" aria-label="Позвонить">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+</a>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lightboxClose">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </div>
+  <img id="lightboxImg" src="" alt="Просмотр фото">
+</div>
+
+<script src="catalog-data.js"></script>
+<script src="catalog.js"></script>
+</body>
+</html>
