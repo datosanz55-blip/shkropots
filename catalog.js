@@ -32,8 +32,9 @@
     if (item.img) {
       a.className += ' lightbox-trigger';
       a.setAttribute('data-full', item.img);
+      // в сетке — лёгкое превью, в лайтбокс уходит крупное
       a.innerHTML =
-        '<span class="item-photo"><img src="' + item.img + '" alt="' +
+        '<span class="item-photo"><img src="' + (item.thumb || item.img) + '" alt="' +
         (item.name || catName) + '" loading="lazy" decoding="async"></span>' +
         '<span class="item-name">' + (item.name || catName) + '</span>';
     } else {
