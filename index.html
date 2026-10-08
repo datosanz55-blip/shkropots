@@ -56,6 +56,7 @@
   }]
 }
 </script>
+<link rel="preload" as="image" href="images/terrace-pool.jpg" fetchpriority="high">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -67,7 +68,7 @@
 <header id="siteHeader">
   <div class="nav">
     <a class="logo" href="#top" aria-label="ShkrobotS — Loft Studio">
-      <img class="logo-img" src="images/logo.jpg" alt="ShkrobotS — Loft Studio">
+      <img class="logo-img" src="images/logo.jpg" alt="ShkrobotS — Loft Studio" width="1920" height="548">
     </a>
     <nav class="navlinks">
       <a href="#about">О компании</a>
@@ -127,21 +128,21 @@
         <div class="hero-slider" id="heroSlider">
           <div class="hero-slides" id="heroSlides">
             <div class="hero-slide lightbox-trigger" data-full="images/terrace-pool.jpg">
-              <img src="images/terrace-pool.jpg" alt="Комплект мебели для террасы ShkrobotS у бассейна" loading="eager">
+              <img src="images/terrace-pool.jpg" alt="Комплект мебели для террасы ShkrobotS у бассейна" loading="eager" fetchpriority="high" decoding="async" width="864" height="1184">
               <div class="zoom-hint">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
               </div>
               <span class="slide-caption">Терраса · 185 000 ₽</span>
             </div>
             <div class="hero-slide lightbox-trigger" data-full="images/gazebo-tent.jpg">
-              <img src="images/gazebo-tent.jpg" alt="Мебель для беседки под тентом" loading="lazy">
+              <img src="images/gazebo-tent.jpg" alt="Мебель для беседки под тентом" loading="lazy" width="1280" height="956">
               <div class="zoom-hint">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
               </div>
               <span class="slide-caption">Беседка · 250 000 ₽</span>
             </div>
             <div class="hero-slide lightbox-trigger" data-full="images/terrace-balcony.jpg">
-              <img src="images/terrace-balcony.jpg" alt="Уличный комплект мебели на заказ" loading="lazy">
+              <img src="images/terrace-balcony.jpg" alt="Уличный комплект мебели на заказ" loading="lazy" width="856" height="626">
               <div class="zoom-hint">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
               </div>
@@ -186,27 +187,27 @@
     </div>
     <div class="cat-grid stagger">
       <a class="cat-tile" href="catalog.html#outdoor">
-        <span class="cat-photo"><img src="images/catalog/thumb/outdoor-01.jpg" alt="Уличная мебель" loading="lazy"></span>
+        <span class="cat-photo"><img src="images/catalog/thumb/outdoor-01.jpg" alt="Уличная мебель" loading="lazy" width="900" height="688"></span>
         <span class="cat-name">Уличная мебель</span>
       </a>
       <a class="cat-tile" href="catalog.html#retail">
-        <span class="cat-photo"><img src="images/catalog/thumb/retail-14.jpg" alt="Торговое оборудование" loading="lazy"></span>
+        <span class="cat-photo"><img src="images/catalog/thumb/retail-14.jpg" alt="Торговое оборудование" loading="lazy" width="675" height="900"></span>
         <span class="cat-name">Торговое оборудование</span>
       </a>
       <a class="cat-tile" href="catalog.html#office">
-        <span class="cat-photo"><img src="images/catalog/thumb/office-01.jpg" alt="Мебель для офиса" loading="lazy"></span>
+        <span class="cat-photo"><img src="images/catalog/thumb/office-01.jpg" alt="Мебель для офиса" loading="lazy" width="674" height="900"></span>
         <span class="cat-name">Мебель для офиса</span>
       </a>
       <a class="cat-tile" href="catalog.html#horeca">
-        <span class="cat-photo"><img src="images/catalog/thumb/horeca-03.jpg" alt="Мебель для кафе и ресторанов" loading="lazy"></span>
+        <span class="cat-photo"><img src="images/catalog/thumb/horeca-03.jpg" alt="Мебель для кафе и ресторанов" loading="lazy" width="600" height="900"></span>
         <span class="cat-name">Мебель для кафе и ресторанов</span>
       </a>
       <a class="cat-tile" href="catalog.html#kitchens">
-        <span class="cat-photo"><img src="images/catalog/thumb/kitchens-01.jpg" alt="Кухни встроенные" loading="lazy"></span>
+        <span class="cat-photo"><img src="images/catalog/thumb/kitchens-01.jpg" alt="Кухни встроенные" loading="lazy" width="600" height="900"></span>
         <span class="cat-name">Кухни встроенные</span>
       </a>
       <a class="cat-tile" href="catalog.html#glamping">
-        <span class="cat-photo"><img src="images/catalog/thumb/glamping-12.jpg" alt="Мебель для глэмпинга" loading="lazy"></span>
+        <span class="cat-photo"><img src="images/catalog/thumb/glamping-12.jpg" alt="Мебель для глэмпинга" loading="lazy" width="900" height="600"></span>
         <span class="cat-name">Мебель для глэмпинга</span>
       </a>
     </div>
@@ -270,7 +271,7 @@
         </a>
       </div>
       <div class="strip-photo reveal-scale lightbox-trigger" data-full="images/terrace-balcony.jpg">
-        <img src="images/terrace-balcony.jpg" alt="Работа мастерской ShkrobotS" loading="lazy">
+        <img src="images/terrace-balcony.jpg" alt="Работа мастерской ShkrobotS" loading="lazy" width="856" height="626">
       </div>
     </div>
   </div>
@@ -289,7 +290,7 @@
       <div class="product-card lightbox-trigger" data-full="images/terrace-pool.jpg">
         <div class="product-photo">
           <span class="product-badge">Терраса</span>
-          <img src="images/terrace-pool.jpg" alt="Комплект мебели для террасы у бассейна" loading="lazy">
+          <img src="images/terrace-pool.jpg" alt="Комплект мебели для террасы у бассейна" loading="lazy" width="864" height="1184">
         </div>
         <div class="product-info">
           <div class="row">
@@ -304,7 +305,7 @@
       <div class="product-card lightbox-trigger" data-full="images/gazebo-tent.jpg">
         <div class="product-photo">
           <span class="product-badge">Беседка</span>
-          <img src="images/gazebo-tent.jpg" alt="Комплект мебели для беседки" loading="lazy">
+          <img src="images/gazebo-tent.jpg" alt="Комплект мебели для беседки" loading="lazy" width="1280" height="956">
         </div>
         <div class="product-info">
           <div class="row">
@@ -319,7 +320,7 @@
       <div class="product-card lightbox-trigger" data-full="images/terrace-balcony.jpg">
         <div class="product-photo">
           <span class="product-badge">На заказ</span>
-          <img src="images/terrace-balcony.jpg" alt="Уличный комплект мебели на заказ" loading="lazy">
+          <img src="images/terrace-balcony.jpg" alt="Уличный комплект мебели на заказ" loading="lazy" width="856" height="626">
         </div>
         <div class="product-info">
           <div class="row">

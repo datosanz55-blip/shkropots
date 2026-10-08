@@ -28,6 +28,7 @@ sitemap.xml           — карта сайта
 set-domain.sh         — замена домена во всех файлах одной командой
 preflight.sh          — проверка перед деплоем (ссылки, COPY, git, каталог)
 DEPLOY.md             — порядок деплоя и разбор типовых поломок
+SEO.md                — что сделано, что осталось, что делать вне кода
 Dockerfile            — образ nginx со статикой
 nginx.conf            — конфиг nginx (gzip, кеш, маршруты)
 nginx-security.conf   — security-заголовки, подключаются в каждый location
