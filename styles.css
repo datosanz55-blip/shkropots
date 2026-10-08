@@ -629,6 +629,7 @@
   .foot-form .btn.sent{background:var(--ok); color:#0f1a10; filter:none;}
   .foot-col h4{font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); margin-bottom:18px; font-weight:700;}
   .foot-col a{display:block; font-size:14.5px; margin-bottom:12px; color:var(--muted); transition:color .2s ease, transform .2s ease; width:fit-content;}
+  .foot-note{display:block; font-size:14.5px; margin-bottom:12px; color:var(--muted);}
   .foot-col a:hover{color:var(--brass-bright); transform:translateX(3px);}
   .foot-bottom{
     display:flex; align-items:center; justify-content:space-between;
