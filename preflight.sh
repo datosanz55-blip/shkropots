@@ -117,7 +117,17 @@ else
     say "   python3 не найден — проверка пропущена"
 fi
 
-say "6. Каталог"
+say "6. FAQ"
+# Видимый текст и разметка FAQPage обязаны совпадать дословно:
+# расхождение считается обманом разметки, за это снимают сниппет.
+if command -v python3 >/dev/null 2>&1; then
+    out=$(./build-faq.py --check 2>&1) || bad "$out"
+    [ -n "${out##*разошёл*}" ] && say "   $out"
+else
+    say "   python3 не найден — проверка пропущена"
+fi
+
+say "7. Каталог"
 if command -v node >/dev/null 2>&1; then
     node -e '
       const fs = require("fs");
@@ -134,7 +144,7 @@ else
     say "   node не найден — проверка каталога пропущена"
 fi
 
-say "7. Домен"
+say "8. Домен"
 if grep -q 'shkrobots\.ru' index.html 2>/dev/null; then
     say "   ВНИМАНИЕ: стоит заглушка shkrobots.ru — перед продом ./set-domain.sh <домен>"
 else
