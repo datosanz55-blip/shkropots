@@ -177,17 +177,6 @@
     if (menu) setMenu(false);
   });
 
-  /* Форма — как на главной, бэкенда пока нет */
-  var leadForm = document.getElementById('leadForm');
-  if (leadForm) {
-    leadForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var b = document.getElementById('leadBtn');
-      b.textContent = 'Отправлено ✓';
-      b.classList.add('sent');
-      b.disabled = true;
-    });
-  }
 
   /* Старт: категория может прийти адресом catalog.html#beds */
   buildFilter();

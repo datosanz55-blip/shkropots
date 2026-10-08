@@ -618,15 +618,7 @@
   }
   .foot-cta h3{font-size:30px; font-weight:700; margin-bottom:14px; max-width:320px; color:var(--ink);}
   .foot-cta p{color:var(--muted); font-size:14px; margin-bottom:22px; max-width:340px;}
-  .foot-form{display:flex; gap:10px;}
-  .foot-form input{
-    flex:1; background:var(--surface-2); border:1px solid var(--line-strong);
-    border-radius:100px; padding:13px 18px; color:var(--ink); font-size:14px; font-family:inherit;
-    transition:border-color .25s ease, background .25s ease;
-  }
-  .foot-form input:focus{border-color:var(--brass); background:#2a2f35;}
-  .foot-form input::placeholder{color:var(--faint);}
-  .foot-form .btn.sent{background:var(--ok); color:#0f1a10; filter:none;}
+  .foot-actions{display:flex; flex-wrap:wrap; gap:12px;}
   .foot-col h4{font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); margin-bottom:18px; font-weight:700;}
   .foot-col a{display:block; font-size:14.5px; margin-bottom:12px; color:var(--muted); transition:color .2s ease, transform .2s ease; width:fit-content;}
   .foot-note{display:block; font-size:14.5px; margin-bottom:12px; color:var(--muted);}
@@ -673,7 +665,7 @@
     .hero-sub{font-size:32px;}
     .cat-grid{grid-template-columns:1fr;}
     .foot-grid{grid-template-columns:1fr;}
-    .foot-form{flex-direction:column;}
+    .foot-actions{flex-direction:column; align-items:stretch;}
     .calc-result{flex-direction:column; align-items:flex-start;}
   }
 
