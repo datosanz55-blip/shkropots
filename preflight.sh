@@ -73,7 +73,29 @@ if [ -f .dockerignore ]; then
     say "   нужное не отсекается"
 fi
 
-say "4. Каталог"
+say "4. Под контролем git"
+# Самая дорогая ошибка на проде: файл лежит на сервере, но не в репозитории.
+# Dokploy при деплое делает git pull/clone — и файл просто исчезает.
+# Так теряли Dockerfile: билд падал с "failed to read dockerfile", и его
+# пересоздавали руками на сервере, теряя вместе с ним весь конфиг nginx.
+if git rev-parse --git-dir >/dev/null 2>&1; then
+    UNTRACKED=0
+    for f in $PAGES $ASSETS Dockerfile nginx.conf nginx-security.conf .dockerignore; do
+        git ls-files --error-unmatch "$f" >/dev/null 2>&1 \
+            || { bad "$f есть на диске, но НЕ в git — при деплое исчезнет"; UNTRACKED=$((UNTRACKED+1)); }
+    done
+    git ls-files --error-unmatch images >/dev/null 2>&1 \
+        || bad "images/ не под контролем git"
+    [ "$UNTRACKED" -eq 0 ] && say "   все файлы сборки закоммичены"
+    if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+        say "   ВНИМАНИЕ: есть незакоммиченные правки — Dokploy их не увидит:"
+        git status --porcelain | sed 's/^/     /' | head -10
+    fi
+else
+    say "   не git-репозиторий — проверка пропущена"
+fi
+
+say "5. Каталог"
 if command -v node >/dev/null 2>&1; then
     node -e '
       const fs = require("fs");
@@ -90,7 +112,7 @@ else
     say "   node не найден — проверка каталога пропущена"
 fi
 
-say "5. Домен"
+say "6. Домен"
 if grep -q 'shkrobots\.ru' index.html 2>/dev/null; then
     say "   ВНИМАНИЕ: стоит заглушка shkrobots.ru — перед продом ./set-domain.sh <домен>"
 else

@@ -26,7 +26,8 @@ images/
 robots.txt            — индексация + ссылка на sitemap
 sitemap.xml           — карта сайта
 set-domain.sh         — замена домена во всех файлах одной командой
-preflight.sh          — проверка перед деплоем (ссылки, COPY, каталог)
+preflight.sh          — проверка перед деплоем (ссылки, COPY, git, каталог)
+DEPLOY.md             — порядок деплоя и разбор типовых поломок
 Dockerfile            — образ nginx со статикой
 nginx.conf            — конфиг nginx (gzip, кеш, маршруты)
 nginx-security.conf   — security-заголовки, подключаются в каждый location
@@ -77,23 +78,11 @@ docker compose up --build
 # открыть http://localhost:8080
 ```
 
-## Деплой через Dokploy
+## Деплой
 
-Сервер (по SSH через Termius) должен иметь установленный Dokploy.
-
-Вариант A — **Application (Dockerfile)** (рекомендуется):
-
-1. В Dokploy создай проект → **Create Service** → **Application**.
-2. Source: подключи этот Git-репозиторий и ветку.
-3. Build Type: **Dockerfile**, путь — `Dockerfile`.
-4. В разделе **Domains** добавь домен, Container Port — `80`, включи HTTPS (Let's Encrypt).
-5. **Deploy**. Dokploy соберёт образ по `Dockerfile` и поднимет контейнер за встроенным Traefik.
-
-Вариант B — **Compose**:
-
-1. Create Service → **Compose**, подключи репозиторий.
-2. Compose Path — `docker-compose.yml`.
-3. Домен вешается на сервис `web`, порт `80`.
+Порядок, правила и разбор типовых поломок — в **[DEPLOY.md](DEPLOY.md)**.
+Коротко: источник правды — репозиторий, на сервере ничего не править,
+перед пушем гонять `./preflight.sh`.
 
 ## Стек
 
