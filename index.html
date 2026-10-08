@@ -346,50 +346,51 @@
       <div class="num">5,0</div>
       <div>
         <div class="stars" aria-hidden="true">★★★★★</div>
-        <div class="cap">8 оценок · <a href="#" rel="noopener">Яндекс.Карты</a></div>
+        <div class="cap">3 отзыва · <a href="#" rel="noopener">Яндекс.Карты</a></div>
       </div>
     </div>
     <div class="rev-grid stagger">
       <article class="rev-card">
         <div class="rev-top">
-          <span class="rev-ava" aria-hidden="true">К</span>
+          <span class="rev-ava" aria-hidden="true">С</span>
           <div class="rev-who">
-            <div class="rev-name">Имя клиента</div>
-            <div class="rev-date">дд.мм.гггг</div>
+            <div class="rev-name">Светлана Подшумляк</div>
+            <div class="rev-date">7 июля · Знаток города 3 уровня</div>
           </div>
         </div>
         <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
-        <p class="rev-text">Место для реального отзыва с Яндекс.Карт.</p>
+        <p class="rev-text">Заказали в этой компании встроенную кухню по нашим размерам и «хотелкам». Все сделано качественно и в срок, начиная от разработки проекта до монтажа. Учли все пожелания под наш бюджет. Будем ещё заказывать мебель в прихожую и спальню. Рекомендуем данную компанию. Цены приятные.</p>
       </article>
       <article class="rev-card">
         <div class="rev-top">
-          <span class="rev-ava" aria-hidden="true">К</span>
+          <span class="rev-ava" aria-hidden="true">В</span>
           <div class="rev-who">
-            <div class="rev-name">Имя клиента</div>
-            <div class="rev-date">дд.мм.гггг</div>
+            <div class="rev-name">Владислав Владислав</div>
+            <div class="rev-date">7 июля · Знаток города 2 уровня</div>
           </div>
         </div>
         <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
-        <p class="rev-text">Место для реального отзыва с Яндекс.Карт.</p>
+        <p class="rev-text">Заказали в этой компании мебель для беседки по индивидуальным размерам. Изготовили в оговоренные в договоре сроки, доставили, установили. Качественная, добротная мебель. Материалы хорошего качества. Мы довольны!</p>
       </article>
       <article class="rev-card">
         <div class="rev-top">
-          <span class="rev-ava" aria-hidden="true">К</span>
+          <span class="rev-ava" aria-hidden="true">Н</span>
           <div class="rev-who">
-            <div class="rev-name">Имя клиента</div>
-            <div class="rev-date">дд.мм.гггг</div>
+            <div class="rev-name">Наталья Р.</div>
+            <div class="rev-date">7 июля · Знаток города 3 уровня</div>
           </div>
         </div>
         <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
-        <p class="rev-text">Место для реального отзыва с Яндекс.Карт.</p>
+        <p class="rev-text">Очень красивая и качественная мебель, удобная и комфортная. С удовольствием проводим время на террасе.</p>
       </article>
     </div>
   </div>
 </section>
 
 <!-- ===== НОВОСТИ =====
-     Карточки — ЗАГЛУШКИ. Реальных новостей студии у нас нет:
-     заголовки, тексты, даты и фото подставить от клиента. -->
+     Пока новостей нет — показываем аккуратную заглушку-обещание.
+     Когда появятся: вернуть сетку .news-grid с карточками .news-card
+     (разметка лежит в истории git) и убрать .news-soon. -->
 <section class="news" id="news">
   <div class="wrap">
     <div class="news-head reveal">
@@ -398,31 +399,18 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
       </a>
     </div>
-    <div class="news-grid stagger">
-      <article class="news-card">
-        <div class="news-photo is-empty" aria-hidden="true"></div>
-        <div class="news-body">
-          <h3 class="news-title">Заголовок новости</h3>
-          <p class="news-text">Короткое описание — две-три строки о событии, акции или новом изделии.</p>
-          <div class="news-date">дд.мм.гггг</div>
-        </div>
-      </article>
-      <article class="news-card">
-        <div class="news-photo is-empty" aria-hidden="true"></div>
-        <div class="news-body">
-          <h3 class="news-title">Заголовок новости</h3>
-          <p class="news-text">Короткое описание — две-три строки о событии, акции или новом изделии.</p>
-          <div class="news-date">дд.мм.гггг</div>
-        </div>
-      </article>
-      <article class="news-card">
-        <div class="news-photo is-empty" aria-hidden="true"></div>
-        <div class="news-body">
-          <h3 class="news-title">Заголовок новости</h3>
-          <p class="news-text">Короткое описание — две-три строки о событии, акции или новом изделии.</p>
-          <div class="news-date">дд.мм.гггг</div>
-        </div>
-      </article>
+    <div class="news-soon reveal">
+      <svg class="news-soon-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+           stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+        <circle cx="24" cy="24" r="17"/>
+        <path d="M24 14v10l6.5 4"/>
+      </svg>
+      <h3>Скоро вернёмся к вам с новыми новостями</h3>
+      <p>Готовим материал о свежих проектах, новых материалах и работе цеха.
+         А пока — загляните в каталог: там уже больше двухсот выполненных изделий.</p>
+      <a class="btn" href="catalog.html">Смотреть каталог
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </a>
     </div>
   </div>
 </section>
