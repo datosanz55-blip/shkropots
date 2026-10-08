@@ -54,7 +54,9 @@ COPIED=$(awk '
 for f in $PAGES $ASSETS; do
     printf '%s\n' "$COPIED" | grep -qx "$f" || bad "$f не попадает в образ — нет в COPY"
 done
-printf '%s\n' "$COPIED" | grep -qx 'images/' || bad "images/ не попадает в образ — нет в COPY"
+for d in images/ fonts/; do
+    printf '%s\n' "$COPIED" | grep -qx "$d" || bad "$d не попадает в образ — нет в COPY"
+done
 for f in $COPIED; do
     case "$f" in
         */) [ -d "${f%/}" ] || bad "в COPY указан каталог $f, которого нет в репозитории" ;;
@@ -84,8 +86,9 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
         git ls-files --error-unmatch "$f" >/dev/null 2>&1 \
             || { bad "$f есть на диске, но НЕ в git — при деплое исчезнет"; UNTRACKED=$((UNTRACKED+1)); }
     done
-    git ls-files --error-unmatch images >/dev/null 2>&1 \
-        || bad "images/ не под контролем git"
+    for d in images fonts; do
+        git ls-files --error-unmatch "$d" >/dev/null 2>&1 || bad "$d/ не под контролем git"
+    done
     [ "$UNTRACKED" -eq 0 ] && say "   все файлы сборки закоммичены"
     if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
         say "   ВНИМАНИЕ: есть незакоммиченные правки — Dokploy их не увидит:"

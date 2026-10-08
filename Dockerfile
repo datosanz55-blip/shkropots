@@ -15,6 +15,7 @@ COPY index.html catalog.html 404.html \
      robots.txt sitemap.xml \
      /usr/share/nginx/html/
 COPY images/ /usr/share/nginx/html/images/
+COPY fonts/  /usr/share/nginx/html/fonts/
 
 # Проверка конфига на этапе сборки: кривой nginx.conf роняет образ здесь,
 # а не на проде в крэш-луп после деплоя.
