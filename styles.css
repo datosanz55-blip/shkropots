@@ -704,12 +704,6 @@
   .about-text{font-size:15.5px; line-height:1.7; color:var(--muted); margin-bottom:16px; max-width:520px;}
   .about-text:last-of-type{margin-bottom:28px;}
   .strip h2{font-size:38px; font-weight:700; margin-bottom:26px; color:var(--ink);}
-    list-style:none;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:20px 4px; border-bottom:1px solid var(--line);
-    font-size:15.5px; font-weight:500; color:var(--ink);
-    cursor:pointer; transition:padding .25s var(--ease), color .25s ease;
-  }
   .strip-photo{border-radius:20px; overflow:hidden; aspect-ratio:1/1; cursor:pointer; border:1px solid var(--line);}
   .strip-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease);}
   .strip-photo:hover img{transform:scale(1.05);}
@@ -763,6 +757,12 @@
   }
   .rev-score .num{font-family:'Jost'; font-weight:700; font-size:40px; line-height:1; color:var(--brass-bright);}
   .rev-score .stars{color:var(--brass-bright); letter-spacing:3px; font-size:15px;}
+  /* Половина звезды: рейтинг 4,3, рисовать пять полных — врать. */
+  .stars .half{position:relative; color:rgba(238,221,191,0.28);}
+  .stars .half::before{
+    content:'★'; position:absolute; left:0; top:0;
+    width:.5em; overflow:hidden; color:var(--brass-bright);
+  }
   .rev-score .cap{font-size:13.5px; color:var(--muted); margin-top:4px;}
   .rev-score a{color:var(--brass-bright); border-bottom:1px solid rgba(238,221,191,0.4);}
   .rev-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; align-items:start;}
@@ -1005,3 +1005,43 @@
   .cat-hero{padding:92px 0 24px;}
 }
 @media (max-width:640px){ .item-grid{grid-template-columns:repeat(2,1fr); gap:14px;} }
+
+/* ===== СТРАНИЦЫ КАТЕГОРИЙ ===== */
+.crumbs{padding:104px 0 0; font-size:13px; color:var(--faint);}
+.crumbs a{color:var(--muted); border-bottom:1px solid transparent;}
+.crumbs a:hover{color:var(--brass-bright); border-bottom-color:rgba(238,221,191,0.4);}
+.crumbs span{margin:0 4px;}
+.cat-page{padding:28px 0 90px;}
+.cat-intro{max-width:720px; margin-bottom:44px;}
+.cat-intro h1{
+  font-family:'Jost'; font-weight:700; font-size:clamp(30px,4vw,46px);
+  line-height:1.12; color:var(--ink); margin-bottom:22px;
+}
+.cat-intro .about-text{max-width:none;}
+.cat-count{
+  margin-top:18px; font-size:13px; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--brass); font-variant-numeric:tabular-nums;
+}
+.cat-cta{
+  margin-top:56px; padding:40px 34px; border:1px solid var(--line); border-radius:12px;
+  background:rgba(28,24,20,0.82);
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+}
+.cat-cta h2{font-family:'Jost'; font-weight:600; font-size:24px; color:var(--ink); margin-bottom:10px;}
+.cat-cta p{font-size:15px; line-height:1.65; color:var(--muted); margin-bottom:22px;}
+.cat-others{margin-top:52px;}
+.cat-others h2{
+  font-size:13px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--faint); margin-bottom:16px; font-weight:600;
+}
+.cat-others-links{display:flex; flex-wrap:wrap; gap:10px;}
+.cat-others-links a{
+  font-size:14px; color:var(--muted); padding:8px 15px;
+  border:1px solid var(--line); border-radius:999px;
+  transition:color .2s ease, border-color .2s ease;
+}
+.cat-others-links a:hover{color:var(--brass-bright); border-color:var(--line-strong);}
+@media (max-width:640px){
+  .crumbs{padding-top:88px;}
+  .cat-cta{padding:30px 22px;}
+}

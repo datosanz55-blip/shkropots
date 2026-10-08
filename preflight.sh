@@ -16,10 +16,11 @@ say() { printf '%s\n' "$*"; }
 bad() { printf '  ОШИБКА: %s\n' "$*"; FAIL=1; }
 
 PAGES="index.html catalog.html 404.html"
-ASSETS="styles.css catalog-data.js catalog.js robots.txt sitemap.xml"
+CATPAGES=$(ls catalog/*.html 2>/dev/null || true)
+ASSETS="styles.css catalog-data.js catalog.js catalog-page.js robots.txt sitemap.xml"
 
 say "1. Ссылки из разметки и стилей"
-REFS=$( { grep -ohE '(href|src)="[^"#:]+"' $PAGES 2>/dev/null | sed -E 's/.*="//; s/"$//'
+REFS=$( { grep -ohE '(href|src)="[^"#:]+"' $PAGES $CATPAGES 2>/dev/null | sed -E 's/.*="//; s/"$//'
           grep -ohE "url\('[^']+'\)" styles.css 2>/dev/null | sed -E "s/url\('//; s/'\)//"
           grep -ohE "'images/[^']+'" catalog.js catalog-data.js 2>/dev/null | tr -d "'"
         } | sort -u )
@@ -54,7 +55,7 @@ COPIED=$(awk '
 for f in $PAGES $ASSETS; do
     printf '%s\n' "$COPIED" | grep -qx "$f" || bad "$f не попадает в образ — нет в COPY"
 done
-for d in images/ fonts/; do
+for d in images/ fonts/ catalog/; do
     printf '%s\n' "$COPIED" | grep -qx "$d" || bad "$d не попадает в образ — нет в COPY"
 done
 for f in $COPIED; do
@@ -86,7 +87,7 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
         git ls-files --error-unmatch "$f" >/dev/null 2>&1 \
             || { bad "$f есть на диске, но НЕ в git — при деплое исчезнет"; UNTRACKED=$((UNTRACKED+1)); }
     done
-    for d in images fonts; do
+    for d in images fonts catalog; do
         git ls-files --error-unmatch "$d" >/dev/null 2>&1 || bad "$d/ не под контролем git"
     done
     [ "$UNTRACKED" -eq 0 ] && say "   все файлы сборки закоммичены"
@@ -105,7 +106,18 @@ else
     say "   не git-репозиторий — проверка пропущена"
 fi
 
-say "5. Каталог"
+say "5. Страницы категорий"
+# Страницы генерируются из catalog-data.js. Если данные поменяли,
+# а ./build-pages.py не запустили — на проде будет старый состав.
+if command -v python3 >/dev/null 2>&1; then
+    ./build-pages.py --check >/dev/null 2>&1 \
+        || { bad "страницы в catalog/ разошлись с данными — запустите ./build-pages.py"; }
+    [ "$FAIL" -eq 0 ] && say "   $(ls catalog/*.html 2>/dev/null | wc -l | tr -d ' ') страниц, совпадают с данными"
+else
+    say "   python3 не найден — проверка пропущена"
+fi
+
+say "6. Каталог"
 if command -v node >/dev/null 2>&1; then
     node -e '
       const fs = require("fs");
@@ -122,7 +134,7 @@ else
     say "   node не найден — проверка каталога пропущена"
 fi
 
-say "6. Домен"
+say "7. Домен"
 if grep -q 'shkrobots\.ru' index.html 2>/dev/null; then
     say "   ВНИМАНИЕ: стоит заглушка shkrobots.ru — перед продом ./set-domain.sh <домен>"
 else

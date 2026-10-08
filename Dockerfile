@@ -11,9 +11,10 @@ COPY nginx-security.conf /etc/nginx/snippets/security.conf
 # не забыть добавить его сюда — иначе на проде будет 404,
 # а локально в браузере всё работает.
 COPY index.html catalog.html 404.html \
-     styles.css catalog-data.js catalog.js \
+     styles.css catalog-data.js catalog.js catalog-page.js \
      robots.txt sitemap.xml \
      /usr/share/nginx/html/
+COPY catalog/ /usr/share/nginx/html/catalog/
 COPY images/ /usr/share/nginx/html/images/
 COPY fonts/  /usr/share/nginx/html/fonts/
 
