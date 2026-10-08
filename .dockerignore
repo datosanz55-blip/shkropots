@@ -1,10 +1,10 @@
 .git
 .gitignore
 .github
-README.md
 *.md
 docker-compose.yml
 .dockerignore
+set-domain.sh
 node_modules
 .DS_Store
 *.log
