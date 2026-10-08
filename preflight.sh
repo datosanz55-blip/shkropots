@@ -90,6 +90,13 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
         git ls-files --error-unmatch "$d" >/dev/null 2>&1 || bad "$d/ не под контролем git"
     done
     [ "$UNTRACKED" -eq 0 ] && say "   все файлы сборки закоммичены"
+    # Ранний сигнал: шаблон в .gitignore, накрывающий файлы сборки.
+    # Отслеживаемый файл приедет при клоне в любом случае, но новый такой
+    # файл уже не добавится — а именно так теряли Dockerfile в прошлый раз.
+    for f in Dockerfile nginx.conf nginx-security.conf .dockerignore; do
+        git check-ignore -q --no-index "$f" 2>/dev/null \
+            && say "   ВНИМАНИЕ: .gitignore накрывает $f — уберите шаблон"
+    done
     if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
         say "   ВНИМАНИЕ: есть незакоммиченные правки — Dokploy их не увидит:"
         git status --porcelain | sed 's/^/     /' | head -10
