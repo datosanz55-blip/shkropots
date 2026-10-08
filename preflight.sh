@@ -1,0 +1,102 @@
+#!/bin/sh
+# Предполётная проверка перед деплоем.
+#
+# Ловит класс ошибок «локально работает, на проде 404»: файл лежит в репозитории,
+# разметка на него ссылается, но в образ он не попал — забыли дописать в COPY
+# в Dockerfile или отсёк .dockerignore. Локально через file:// всё открывается,
+# на проде — пустые места и битые картинки.
+#
+#   ./preflight.sh
+#
+# Код возврата: 0 — всё на месте, 1 — есть проблемы.
+set -eu
+cd "$(dirname "$0")"
+FAIL=0
+say() { printf '%s\n' "$*"; }
+bad() { printf '  ОШИБКА: %s\n' "$*"; FAIL=1; }
+
+PAGES="index.html catalog.html 404.html"
+ASSETS="styles.css catalog-data.js catalog.js robots.txt sitemap.xml"
+
+say "1. Ссылки из разметки и стилей"
+REFS=$( { grep -ohE '(href|src)="[^"#:]+"' $PAGES 2>/dev/null | sed -E 's/.*="//; s/"$//'
+          grep -ohE "url\('[^']+'\)" styles.css 2>/dev/null | sed -E "s/url\('//; s/'\)//"
+          grep -ohE "'images/[^']+'" catalog.js catalog-data.js 2>/dev/null | tr -d "'"
+        } | sort -u )
+N=0; MISS=0
+for r in $REFS; do
+    case "$r" in http*|//*|mailto:*|tel:*|data:*|/) continue ;; esac
+    N=$((N+1))
+    [ -e "$(printf '%s' "$r" | sed 's|^/||')" ] || { bad "ссылка $r ведёт в никуда"; MISS=$((MISS+1)); }
+done
+[ "$MISS" -eq 0 ] && say "   проверено $N, все на месте"
+
+say "2. Попадание в Docker-образ"
+# Склеиваем переносы строк, берём только COPY, отбрасываем первый токен (COPY),
+# последний (путь назначения в образе) и флаги вида --chown.
+COPIED=$(awk '
+    /^[[:space:]]*#/ { next }
+    { line = line $0 }
+    /\\[[:space:]]*$/ { sub(/\\[[:space:]]*$/, " ", line); next }
+    {
+        if (line ~ /^[[:space:]]*COPY[[:space:]]/) {
+            n = split(line, t, /[[:space:]]+/)
+            for (i = 1; i <= n; i++) {
+                if (t[i] == "" || t[i] == "COPY" || i == n) continue
+                if (t[i] ~ /^--/) continue
+                print t[i]
+            }
+        }
+        line = ""
+    }
+' Dockerfile)
+
+for f in $PAGES $ASSETS; do
+    printf '%s\n' "$COPIED" | grep -qx "$f" || bad "$f не попадает в образ — нет в COPY"
+done
+printf '%s\n' "$COPIED" | grep -qx 'images/' || bad "images/ не попадает в образ — нет в COPY"
+for f in $COPIED; do
+    case "$f" in
+        */) [ -d "${f%/}" ] || bad "в COPY указан каталог $f, которого нет в репозитории" ;;
+        *)  [ -f "$f" ]     || bad "в COPY указан файл $f, которого нет в репозитории" ;;
+    esac
+done
+[ "$FAIL" -eq 0 ] && say "   все файлы сайта перечислены в COPY"
+
+say "3. .dockerignore"
+if [ -f .dockerignore ]; then
+    for pat in $(grep -vE '^[[:space:]]*(#|$)' .dockerignore); do
+        for f in $PAGES $ASSETS images nginx.conf nginx-security.conf; do
+            [ "$pat" = "$f" ] && bad ".dockerignore выбрасывает нужное: $pat"
+        done
+    done
+    say "   нужное не отсекается"
+fi
+
+say "4. Каталог"
+if command -v node >/dev/null 2>&1; then
+    node -e '
+      const fs = require("fs");
+      (0,eval)(fs.readFileSync("catalog-data.js","utf8")+";globalThis.C=CATALOG_CATEGORIES;globalThis.I=CATALOG_ITEMS;");
+      const ids = new Set(C.map(c => c.id)); let n = 0;
+      for (const it of I) {
+        if (!ids.has(it.cat)) { console.log("  ОШИБКА: позиция ссылается на несуществующую категорию " + it.cat); n++; }
+        for (const k of ["img","thumb"]) if (it[k] && !fs.existsSync(it[k])) { console.log("  ОШИБКА: нет файла " + it[k]); n++; }
+      }
+      console.log("   позиций " + I.length + ", категорий " + C.length + (n ? "" : ", битых ссылок нет"));
+      process.exit(n ? 1 : 0);
+    ' || FAIL=1
+else
+    say "   node не найден — проверка каталога пропущена"
+fi
+
+say "5. Домен"
+if grep -q 'shkrobots\.ru' index.html 2>/dev/null; then
+    say "   ВНИМАНИЕ: стоит заглушка shkrobots.ru — перед продом ./set-domain.sh <домен>"
+else
+    say "   заглушки нет"
+fi
+
+say ""
+if [ "$FAIL" -eq 0 ]; then say "ИТОГ: можно деплоить."; else say "ИТОГ: есть проблемы, деплой остановить."; fi
+exit "$FAIL"
