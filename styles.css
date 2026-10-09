@@ -480,12 +480,14 @@
   }
   .eyebrow{
     display:inline-flex; align-items:center; gap:8px;
+    font-family:inherit;  /* на главной это h1 — не даём ему шрифт заголовков */
     font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
     color:var(--brass-bright); margin-bottom:18px;
   }
   .eyebrow::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--brass); animation:pulse 2s ease-in-out infinite;}
   @keyframes pulse{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(1.6); opacity:.5;}}
   .hero-sub{
+    font-family:'Jost', system-ui, sans-serif; text-wrap:balance;  /* это <p>: H1 главной — строка над ним */
     font-size:clamp(30px, 3.6vw, 46px); line-height:1.0; font-weight:700;
     text-transform:uppercase; letter-spacing:-0.01em; margin-bottom:22px; color:var(--ink);
   }
