@@ -1,8 +1,9 @@
 #!/bin/sh
 # Замена домена во всех файлах разом.
 #
-# Домен прописан в 11 местах: canonical и Open Graph на двух страницах,
-# JSON-LD, robots.txt, sitemap.xml. Править руками — гарантированно
+# Домен прописан в десятках мест: canonical, Open Graph и JSON-LD на всех
+# страницах, robots.txt, sitemap.xml и генератор страниц категорий
+# (build-pages.py — иначе следующая сборка вернёт старый домен). Править руками — гарантированно
 # где-нибудь забыть, а забытый canonical уводит поисковик на чужой адрес.
 #
 #   ./set-domain.sh shkrobots.ru
@@ -18,7 +19,7 @@ if [ -z "$NEW" ]; then
 fi
 NEW=$(printf '%s' "$NEW" | sed -e 's|^https\?://||' -e 's|/$||')
 
-FILES="index.html catalog.html robots.txt sitemap.xml"
+FILES="index.html catalog.html robots.txt sitemap.xml build-pages.py catalog/*.html"
 OLD=$(grep -ohm1 'https://[a-z0-9.-]\+/' $FILES | head -1 | sed -e 's|^https://||' -e 's|/$||')
 
 if [ -z "$OLD" ]; then

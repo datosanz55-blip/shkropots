@@ -28,9 +28,29 @@ DOMAIN = 'https://shkrobots.ru'
 def data():
     js = ('const fs=require("fs");'
           '(0,eval)(fs.readFileSync("catalog-data.js","utf8")+'
-          '";process.stdout.write(JSON.stringify({c:CATALOG_CATEGORIES,i:CATALOG_ITEMS}))")')
+          '";process.stdout.write(JSON.stringify({c:CATALOG_CATEGORIES,i:CATALOG_ITEMS,'
+          'stubs:CATALOG_PLACEHOLDERS_PER_CATEGORY}))")')
     r = subprocess.run(['node', '-e', js], cwd=ROOT, capture_output=True, text=True, check=True)
     return json.loads(r.stdout)
+
+
+def size(path):
+    """Ширина и высота JPEG из заголовка — без Pillow, чтобы preflight
+    работал на любой машине с голым Python."""
+    b = (ROOT / path).read_bytes()
+    k = 2
+    while k < len(b):
+        if b[k] != 0xFF:
+            k += 1
+            continue
+        m = b[k + 1]
+        if m in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF):
+            return int.from_bytes(b[k + 7:k + 9], 'big'), int.from_bytes(b[k + 5:k + 7], 'big')
+        if m in (0xD8, 0x01) or 0xD0 <= m <= 0xD7 or m == 0xFF:
+            k += 2 if m != 0xFF else 1
+            continue
+        k += 2 + int.from_bytes(b[k + 2:k + 4], 'big')
+    raise ValueError(f'не JPEG или нет SOF: {path}')
 
 
 def chunk(path, start, end):
@@ -44,13 +64,20 @@ def build(cat, items, siblings):
     n = len(items)
     url = f"{DOMAIN}/catalog/{cat['id']}.html"
 
-    # у старых позиций превью нет — показываем крупное
-    cards = '\n'.join(
-        f'      <a class="item lightbox-trigger" data-full="/{i["img"]}">\n'
-        f'        <span class="item-photo"><img src="/{i.get("thumb") or i["img"]}"'
-        f' alt="{e(i["name"])} — ShkrobotS, Челябинск" loading="lazy" decoding="async"></span>\n'
-        f'        <span class="item-name">{e(i["name"])}</span>\n'
-        f'      </a>' for i in items)
+    # У старых позиций превью нет — показываем крупное.
+    # href обязателен: <a> без него поисковик ссылкой не считает (Lighthouse:
+    # «Links are not crawlable»), а без JS фото просто откроется целиком.
+    # width/height — чтобы браузер заранее знал пропорции и сетка не прыгала.
+    def card(i):
+        src = i.get("thumb") or i["img"]
+        w, h = size(src)
+        return (f'      <a class="item lightbox-trigger" href="/{i["img"]}" data-full="/{i["img"]}">\n'
+                f'        <span class="item-photo"><img src="/{src}"'
+                f' alt="{e(i["name"])} — ShkrobotS, Челябинск" width="{w}" height="{h}"'
+                f' loading="lazy" decoding="async"></span>\n'
+                f'        <span class="item-name">{e(i["name"])}</span>\n'
+                f'      </a>')
+    cards = '\n'.join(card(i) for i in items)
 
     others = '\n'.join(
         f'        <a href="/catalog/{s["id"]}.html">{e(s["name"])}</a>'
@@ -170,6 +197,72 @@ def build(cat, items, siblings):
 '''
 
 
+def catalog_html(d, by, chosen):
+    """Сетка, фильтр и счётчик catalog.html — сразу в разметке.
+
+    Раньше всё это рисовал catalog.js после загрузки catalog-data.js:
+    поисковик видел пустую страницу (118 слов), а когда сетка появлялась,
+    вёрстка уезжала вниз (CLS 0,58 в Lighthouse). Теперь здесь та же
+    разметка, что строит catalog.js для «Все», и скрипт её только оживляет.
+    Меняется catalog-data.js — перезапустить ./build-pages.py."""
+    e = html.escape
+    t = (ROOT / 'catalog.html').read_text(encoding='utf-8')
+
+    chips = ['    <button type="button" class="chip" data-id="all" aria-pressed="true">Все</button>']
+    for c in d['c']:
+        n = len(by.get(c['id'], []))
+        cnt = f'<span class="n">{n}</span>' if n else ''
+        chips.append(f'    <button type="button" class="chip" data-id="{c["id"]}"'
+                     f' aria-pressed="false">{e(c["name"])}{cnt}</button>')
+
+    groups = []
+    for c in d['c']:
+        items = by.get(c['id'], [])
+        n = len(items)
+        cnt = f'<span class="n">{n} {plural(n)}</span>' if n else ''
+        if items:
+            cards = []
+            for i in items:
+                src = i.get('thumb') or i['img']
+                w, h = size(src)
+                name = e(i.get('name') or c['name'])
+                cards.append(
+                    f'          <a class="item lightbox-trigger" href="{i["img"]}" data-full="{i["img"]}">'
+                    f'<span class="item-photo"><img src="{src}" alt="{name} — ShkrobotS, Челябинск"'
+                    f' width="{w}" height="{h}" loading="lazy" decoding="async"></span>'
+                    f'<span class="item-name">{name}</span></a>')
+        else:
+            cards = [f'          <a class="item" href="/#calc"><span class="item-photo is-empty"'
+                     f' aria-hidden="true"></span><span class="item-name">{e(c["name"])}</span></a>'] * d['stubs']
+        groups.append(f'      <section class="cat-group">\n'
+                      f'        <h2>{e(c["name"])}{cnt}</h2>\n'
+                      f'        <div class="item-grid">\n' + '\n'.join(cards) + '\n'
+                      f'        </div>\n      </section>')
+
+    total = len(d['i'])
+    count = (f'В каталоге {total} {plural(total)} в {len(d["c"])} категориях' if total
+             else f'Каталог наполняется — {len(d["c"])} категорий, фото добавляем')
+
+    def put(t, begin, end, inner):
+        i, j = t.index(begin) + len(begin), t.index(end)
+        return t[:i] + inner + t[j:]
+
+    t = put(t, '<!-- FILTER:BEGIN -->', '<!-- FILTER:END -->', '\n' + '\n'.join(chips) + '\n  ')
+    t = put(t, '<!-- COUNT:BEGIN -->', '<!-- COUNT:END -->', count)
+    t = put(t, '<!-- GRID:BEGIN -->', '<!-- GRID:END -->', '\n' + '\n'.join(groups) + '\n    ')
+
+    # Разметка: список ведёт на настоящие страницы категорий, а не на
+    # catalog.html#id — адрес с решёткой поисковик отдельной страницей не считает.
+    a, b = '<script type="application/ld+json">\n', '\n</script>'
+    i = t.index(a) + len(a); j = t.index(b, i)
+    ld = json.loads(t[i:j])
+    page = next(g for g in ld['@graph'] if g['@type'] == 'CollectionPage')
+    page['mainEntity'] = {"@type": "ItemList", "numberOfItems": len(chosen), "itemListElement": [
+        {"@type": "ListItem", "position": k + 1, "name": c['name'],
+         "url": f"{DOMAIN}/catalog/{c['id']}.html"} for k, c in enumerate(chosen)]}
+    return t[:i] + json.dumps(ld, ensure_ascii=False, indent=2) + t[j:]
+
+
 def plural(n):
     if 11 <= n % 100 <= 14: return 'изделий'
     return {1: 'изделие', 2: 'изделия', 3: 'изделия', 4: 'изделия'}.get(n % 10, 'изделий')
@@ -198,13 +291,21 @@ def main():
         else:
             f.write_text(page, encoding='utf-8'); written += 1
 
+    cat_page = catalog_html(d, by, chosen)
+    cat_file = ROOT / 'catalog.html'
+    if check:
+        if cat_file.read_text(encoding='utf-8') != cat_page:
+            stale.append('catalog.html')
+    else:
+        cat_file.write_text(cat_page, encoding='utf-8')
+
     extra = [p.name for p in OUT.glob('*.html')
              if p.stem not in {c['id'] for c in chosen}]
     if check:
         if stale or extra:
             print('страницы разошлись с данными:', ', '.join(stale + extra))
             return 1
-        print(f'страницы категорий актуальны ({len(chosen)})')
+        print(f'страницы категорий и catalog.html актуальны ({len(chosen)})')
         return 0
 
     for p in extra:

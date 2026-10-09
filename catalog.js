@@ -28,14 +28,15 @@
   function buildCard(item, catName) {
     var a = document.createElement('a');
     a.className = 'item';
-    a.href = 'index.html#calc';
+    a.href = '/#calc';
     if (item.img) {
       a.className += ' lightbox-trigger';
+      a.href = item.img;  // без JS ссылка просто откроет фото
       a.setAttribute('data-full', item.img);
       // в сетке — лёгкое превью, в лайтбокс уходит крупное
       a.innerHTML =
         '<span class="item-photo"><img src="' + (item.thumb || item.img) + '" alt="' +
-        (item.name || catName) + '" loading="lazy" decoding="async"></span>' +
+        (item.name || catName) + ' — ShkrobotS, Челябинск" loading="lazy" decoding="async"></span>' +
         '<span class="item-name">' + (item.name || catName) + '</span>';
     } else {
       a.innerHTML =
@@ -96,6 +97,14 @@
 
   /* Фильтр */
   function buildFilter() {
+    // Кнопки уже в разметке (их собирает build-pages.py) — только оживляем
+    var ready = filterEl.querySelectorAll('.chip');
+    if (ready.length) {
+      ready.forEach(function (b) {
+        b.addEventListener('click', function () { select(b.getAttribute('data-id'), true); });
+      });
+      return;
+    }
     var all = [{ id: 'all', name: 'Все' }].concat(CATALOG_CATEGORIES);
     all.forEach(function (c) {
       var b = document.createElement('button');
@@ -182,7 +191,12 @@
   buildFilter();
   var fromHash = location.hash.replace('#', '');
   var valid = CATALOG_CATEGORIES.some(function (c) { return c.id === fromHash; });
-  select(valid ? fromHash : 'all', false);
+  // Вид «Все» уже собран в catalog.html: перерисовка ничего не изменит,
+  // только лишняя работа. Рисуем сами, лишь если пришли по адресу категории
+  // или разметки почему-то нет.
+  if (valid) select(fromHash, false);
+  else if (listEl.querySelector('.cat-group')) bindLightbox();
+  else select('all', false);
   window.addEventListener('hashchange', function () {
     var id = location.hash.replace('#', '');
     select(CATALOG_CATEGORIES.some(function (c) { return c.id === id; }) ? id : 'all', false);
