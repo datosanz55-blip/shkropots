@@ -20,8 +20,8 @@ Dokploy перезаписывает при каждом деплое.
 ## Первый деплой
 
 1. Dokploy → **Create Service** → **Application**
-2. **Source**: этот репозиторий, ветка `claude/furniture-shop-deploy-build-q0anw5`
-   (или `main` после слияния)
+2. **Source**: Git → `https://github.com/datosanz55-blip/shkropots.git`
+   (репозиторий публичный, ключи не нужны), ветка `claude/furniture-shop-deploy-build-q0anw5`
 3. **Build Type**: `Dockerfile`, путь — `Dockerfile`
 4. **Domains**: домен, **Container Port = 80**, включить HTTPS (Let's Encrypt)
 5. Перед первым деплоем заменить домен-заглушку:
@@ -124,6 +124,7 @@ Traefik не стартует: порт занят. Симптом — Traefik �
 ```bash
 curl -I https://<домен>/                 # 200, Cache-Control: no-cache
 curl -I https://<домен>/catalog          # 200 — каталог, не лендинг
+curl -I https://<домен>/index.html       # 301, Location: /
 curl -o /dev/null -w '%{http_code}\n' https://<домен>/abracadabra   # 404
 curl -s https://<домен>/healthz          # ok
 curl -I -H 'Accept-Encoding: gzip' https://<домен>/styles.css | grep -i encoding
