@@ -713,7 +713,7 @@
 
   /* ===== FEATURED PRODUCTS ===== */
   .featured{padding:20px 0 100px;}
-  .featured-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:34px;}
+  .featured-head{display:flex; flex-wrap:wrap; gap:10px 20px; align-items:baseline; justify-content:space-between; margin-bottom:34px;}
   .featured-head h2{font-size:38px; font-weight:700; color:var(--ink);}
   .featured-head a{font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; color:var(--brass-bright);}
   .products{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
@@ -818,10 +818,12 @@
     backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
   }
   .news-soon-mark{width:46px; height:46px; color:var(--brass); opacity:.85; margin-bottom:20px;}
-  .news-soon h3{
+  .news-soon h3, .news-soon h1{
     font-family:'Jost'; font-weight:600; font-size:clamp(22px,2.6vw,29px);
     line-height:1.25; color:var(--ink); margin-bottom:14px;
   }
+  /* номер телефона не должен переноситься посередине */
+  a[href^="tel:"]{white-space:nowrap;}
   .news-soon p{font-size:15px; line-height:1.7; color:var(--muted); margin-bottom:28px;}
   @media (max-width:640px){ .news-soon{padding:40px 22px 38px;} }
 
@@ -947,7 +949,7 @@
   padding:26px 0 8px; position:sticky; top:74px; z-index:40;
 }
 .cat-filter::before{
-  content:''; position:absolute; inset:-14px -40px 0; z-index:-1;
+  content:''; position:absolute; inset:-14px -32px 0; z-index:-1;  /* не шире полей .wrap — иначе страница едет вбок */
   background:rgba(16,13,11,0.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line);
 }
@@ -1006,6 +1008,10 @@
   .cat-filter::-webkit-scrollbar{display:none;}
   .cat-filter::before{inset:0 0 0 0;}
   .cat-hero{padding:92px 0 24px;}
+}
+@media (max-width:860px){
+  /* у .wrap здесь поля 20px — лента фильтра выходит ровно на них */
+  .cat-filter{margin:0 -20px; padding:20px 20px 12px;}
 }
 @media (max-width:640px){ .item-grid{grid-template-columns:repeat(2,1fr); gap:14px;} }
 

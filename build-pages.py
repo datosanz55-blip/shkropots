@@ -164,7 +164,7 @@ def build(cat, items, siblings):
       <p>Позвоните или напишите в МАКС — обсудим размеры, материалы и посчитаем стоимость.</p>
       <div class="foot-actions">
         <a class="btn" href="tel:+79227381642">Позвонить</a>
-        <a class="btn light" href="https://web.max.ru/194365828" target="_blank" rel="noopener">Написать в МАКС</a>
+        <a class="btn light" href="https://max.ru/u/f9LHodD0cOKJVovQ6kMmyZy7F_938IQZYbPuW6cZV2S_-AhTpt0guGz8AT8" target="_blank" rel="noopener">Написать в МАКС</a>
       </div>
     </div>
 
@@ -188,7 +188,7 @@ def build(cat, items, siblings):
   <div class="lightbox-close" id="lightboxClose">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </div>
-  <img id="lightboxImg" src="" alt="Просмотр фото">
+  <img id="lightboxImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Просмотр фото">
 </div>
 
 <script src="/catalog-page.js"></script>
