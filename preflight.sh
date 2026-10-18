@@ -15,9 +15,9 @@ FAIL=0
 say() { printf '%s\n' "$*"; }
 bad() { printf '  ОШИБКА: %s\n' "$*"; FAIL=1; }
 
-PAGES="index.html catalog.html 404.html"
+PAGES="index.html catalog.html 404.html privacy.html consent.html"
 CATPAGES=$(ls catalog/*.html 2>/dev/null || true)
-ASSETS="styles.css catalog-data.js catalog.js catalog-page.js robots.txt sitemap.xml"
+ASSETS="styles.css catalog-data.js catalog.js catalog-page.js consent.js robots.txt sitemap.xml"
 
 say "1. Ссылки из разметки и стилей"
 REFS=$( { grep -ohE '(href|src)="[^"#:]+"' $PAGES $CATPAGES 2>/dev/null | sed -E 's/.*="//; s/"$//'
@@ -149,6 +149,17 @@ if grep -q 'shkrobots\.ru' index.html 2>/dev/null; then
     say "   ВНИМАНИЕ: стоит заглушка shkrobots.ru — перед продом ./set-domain.sh <домен>"
 else
     say "   заглушки нет"
+fi
+
+say "9. Политика и согласие"
+# Реквизиты оператора заполняются в tools/legal.py. Пока их нет, на страницах
+# стоят метки ⟦…⟧ — публиковать юридический документ с дырами нельзя.
+if grep -q '⟦' privacy.html consent.html 2>/dev/null; then
+    # python, а не grep: в C-локали [^⟧] режет кириллицу по байтам
+    miss=$(python3 -c 'import re;print(", ".join(sorted({m for f in ("privacy.html","consent.html") for m in re.findall("⟦(.*?)⟧",open(f,encoding="utf-8").read())})))')
+    bad "в privacy.html/consent.html не заполнены реквизиты: $miss — заполнить OPERATOR в tools/legal.py и ./build-pages.py"
+else
+    say "   реквизиты оператора заполнены"
 fi
 
 say ""

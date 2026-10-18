@@ -24,8 +24,9 @@ Dokploy перезаписывает при каждом деплое.
    (репозиторий публичный, ключи не нужны), ветка `claude/furniture-shop-deploy-build-q0anw5`
 3. **Build Type**: `Dockerfile`, путь — `Dockerfile`
 4. **Domains**: домен, **Container Port = 80**, включить HTTPS (Let's Encrypt)
-5. Перед первым деплоем заменить домен-заглушку:
-   `./set-domain.sh <домен>`, закоммитить, запушить
+5. Домен в файлах уже `shkrobotstudio.ru`. В DNS у регистратора — A-записи
+   `@` и `www` на IP сервера Beget. В Dokploy добавить домен
+   `shkrobotstudio.ru`; `www` — перенаправлением на него, а не второй копией
 6. **Deploy**
 
 Порт наружу не публикуется: Traefik ходит в контейнер по внутренней сети.
@@ -125,10 +126,16 @@ Traefik не стартует: порт занят. Симптом — Traefik �
 curl -I https://<домен>/                 # 200, Cache-Control: no-cache
 curl -I https://<домен>/catalog          # 200 — каталог, не лендинг
 curl -I https://<домен>/index.html       # 301, Location: /
+curl -I https://<домен>/privacy.html     # 200
+docker logs <контейнер> | tail -3        # IP вида 95.24.17.0 — последняя группа затёрта
 curl -o /dev/null -w '%{http_code}\n' https://<домен>/abracadabra   # 404
 curl -s https://<домен>/healthz          # ok
 curl -I -H 'Accept-Encoding: gzip' https://<домен>/styles.css | grep -i encoding
 ```
+
+В браузере (в режиме инкогнито): внизу появилось уведомление о cookie;
+после «Принять» в DevTools → Network есть запрос к `mc.yandex.ru`, после
+«Отказаться» — нет. В Метрике визит появится через несколько минут.
 
 Если `/catalog` отдаёт лендинг или битый адрес возвращает 200 — в образе
 старый `nginx.conf`.

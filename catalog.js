@@ -28,7 +28,7 @@
   function buildCard(item, catName) {
     var a = document.createElement('a');
     a.className = 'item';
-    a.href = '/#calc';
+    a.href = '#contacts';
     if (item.img) {
       a.className += ' lightbox-trigger';
       a.href = item.img;  // без JS ссылка просто откроет фото

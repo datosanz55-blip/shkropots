@@ -1,0 +1,100 @@
+<!--
+  Калькулятор снят с сайта 2026-10-18 по просьбе заказчика: цены в нём были
+  условные (48 000 / 39 000 / 62 000 ₽), а «Кровать» есть в калькуляторе,
+  но не в каталоге.
+
+  Как вернуть, когда будут реальные цены:
+  1. Разметку ниже (секция <section class="calc">) вставить в index.html
+     перед <section class="strip" id="about">.
+  2. Скрипт ниже — в конец <script> внизу index.html, перед "})();".
+  3. Вернуть пункт меню <a href="#calc">Калькулятор</a> в шапку и мобильное
+     меню index.html и catalog.html, затем ./build-pages.py.
+  Стили .calc* остались в styles.css.
+-->
+
+<section class="calc" id="calc">
+  <div class="wrap">
+    <div class="calc-head reveal">
+      <h2>Посчитайте стоимость изделия</h2>
+      <p>Ориентировочная цена по типу и размеру — точную смету дадим после замера</p>
+    </div>
+    <div class="calc-box reveal-scale">
+      <div class="calc-row">
+        <label>Тип изделия</label>
+        <!-- ВНИМАНИЕ: базовые цены — плейсхолдеры, подтвердить у клиента -->
+        <div class="calc-options" id="calcType">
+          <div class="calc-opt active" data-base="48000" data-label="Стол">Стол</div>
+          <div class="calc-opt" data-base="39000" data-label="Стеллаж">Стеллаж</div>
+          <div class="calc-opt" data-base="62000" data-label="Кровать">Кровать</div>
+        </div>
+      </div>
+      <div class="calc-row">
+        <label for="calcSeats">Длина, см</label>
+        <div class="calc-slider-wrap">
+          <input type="range" id="calcSeats" min="100" max="260" value="160" step="10">
+          <span class="calc-val" id="calcSeatsVal">160 см</span>
+        </div>
+      </div>
+      <div class="calc-row" style="margin-bottom:0;">
+        <label>Порода дерева</label>
+        <div class="calc-options" id="calcFabric">
+          <div class="calc-opt active" data-mult="1">Сосна</div>
+          <div class="calc-opt" data-mult="1.25">Дуб</div>
+          <div class="calc-opt" data-mult="1.4">Орех</div>
+        </div>
+      </div>
+      <div class="calc-result">
+        <span class="label">Примерная стоимость</span>
+        <span class="price" id="calcPrice">48 000 ₽</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Price calculator
+  var typeEls = document.querySelectorAll('#calcType .calc-opt');
+  var fabricEls = document.querySelectorAll('#calcFabric .calc-opt');
+  var seatsInput = document.getElementById('calcSeats');
+  var seatsVal = document.getElementById('calcSeatsVal');
+  var priceEl = document.getElementById('calcPrice');
+
+  var state = { base:48000, size:160, mult:1 };
+
+  function formatPrice(n){
+    n = Math.round(n/500)*500;
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+  }
+  function recalc(){
+    var sizeFactor = 1 + (state.size - 160) / 160;
+    var total = state.base * sizeFactor * state.mult;
+    priceEl.style.opacity = '0.3';
+    setTimeout(function(){
+      priceEl.textContent = formatPrice(total);
+      priceEl.style.opacity = '1';
+    }, 120);
+  }
+  typeEls.forEach(function(el){
+    el.addEventListener('click', function(){
+      typeEls.forEach(function(o){ o.classList.remove('active'); });
+      el.classList.add('active');
+      state.base = parseFloat(el.getAttribute('data-base'));
+      recalc();
+    });
+  });
+  fabricEls.forEach(function(el){
+    el.addEventListener('click', function(){
+      fabricEls.forEach(function(o){ o.classList.remove('active'); });
+      el.classList.add('active');
+      state.mult = parseFloat(el.getAttribute('data-mult'));
+      recalc();
+    });
+  });
+  seatsInput.addEventListener('input', function(){
+    state.size = parseInt(seatsInput.value);
+    seatsVal.textContent = state.size + ' см';
+    recalc();
+  });
+  recalc();
+
+</script>

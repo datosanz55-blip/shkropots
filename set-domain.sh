@@ -19,7 +19,7 @@ if [ -z "$NEW" ]; then
 fi
 NEW=$(printf '%s' "$NEW" | sed -e 's|^https\?://||' -e 's|/$||')
 
-FILES="index.html catalog.html robots.txt sitemap.xml build-pages.py catalog/*.html"
+FILES="index.html catalog.html robots.txt sitemap.xml build-pages.py catalog/*.html tools/legal.py privacy.html consent.html"
 OLD=$(grep -ohm1 'https://[a-z0-9.-]\+/' $FILES | head -1 | sed -e 's|^https://||' -e 's|/$||')
 
 if [ -z "$OLD" ]; then

@@ -10,8 +10,8 @@ COPY nginx-security.conf /etc/nginx/snippets/security.conf
 # Статика сайта. ВАЖНО: при добавлении файла в корень репозитория
 # не забыть добавить его сюда — иначе на проде будет 404,
 # а локально в браузере всё работает.
-COPY index.html catalog.html 404.html \
-     styles.css catalog-data.js catalog.js catalog-page.js \
+COPY index.html catalog.html 404.html privacy.html consent.html \
+     styles.css catalog-data.js catalog.js catalog-page.js consent.js \
      robots.txt sitemap.xml \
      /usr/share/nginx/html/
 COPY catalog/ /usr/share/nginx/html/catalog/

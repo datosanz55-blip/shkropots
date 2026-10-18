@@ -19,10 +19,11 @@ import json, pathlib, re, subprocess, sys, html
 ROOT = pathlib.Path(__file__).parent
 sys.path.insert(0, str(ROOT / 'tools'))
 from pages_content import CONTENT
+import legal
 
 MIN_ITEMS = 4
 OUT = ROOT / 'catalog'
-DOMAIN = 'https://shkrobots.ru'
+DOMAIN = 'https://shkrobotstudio.ru'
 
 
 def data():
@@ -56,6 +57,59 @@ def size(path):
 def chunk(path, start, end):
     t = (ROOT / path).read_text(encoding='utf-8')
     return t[t.index(start):t.index(end)]
+
+
+def chrome():
+    """Шапка и подвал из catalog.html со ссылками от корня — для вложенных страниц."""
+    head = chunk('catalog.html', '<header id="siteHeader">', '</header>') + '</header>'
+    body = chunk('catalog.html', '<footer', '</footer>') + '</footer>'
+    head = re.sub(r'(href|src)="(?!https?:|/|#|tel:|mailto:)', r'\1="/', head)
+    body = re.sub(r'(href|src)="(?!https?:|/|#|tel:|mailto:)', r'\1="/', body)
+    return head, body
+
+
+def build_legal(doc):
+    """privacy.html и consent.html из tools/legal.py.
+    noindex: в поиске им делать нечего, но ссылки по ним робот пройдёт."""
+    e = html.escape
+    head, body = chrome()
+    secs = []
+    for title, inner in doc['sections']():
+        h = f'    <h2>{e(title)}</h2>\n' if title else ''
+        secs.append(f'  <section class="legal-sec">\n{h}{inner.strip()}\n  </section>')
+    return f'''<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{e(doc['title'])}</title>
+<meta name="description" content="{e(doc['desc'])}">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#15120f">
+<link rel="canonical" href="{DOMAIN}/{doc['file']}">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<div class="page-bg" aria-hidden="true"></div>
+
+{head}
+
+<main class="legal">
+  <div class="wrap">
+  <h1>{e(doc['h1'])}</h1>
+{chr(10).join(secs)}
+  </div>
+</main>
+
+{body}
+
+<script src="/catalog-page.js"></script>
+<script src="/consent.js"></script>
+</body>
+</html>
+'''
 
 
 def build(cat, items, siblings):
@@ -101,11 +155,7 @@ def build(cat, items, siblings):
              {"@type": "ListItem", "position": k + 1, "name": it['name'],
               "image": f"{DOMAIN}/{it['img']}"} for k, it in enumerate(items)]}}]}
 
-    head, body = chunk('catalog.html', '<header id="siteHeader">', '</header>') + '</header>', \
-                 chunk('catalog.html', '<footer', '</footer>') + '</footer>'
-    # ссылки шапки и подвала у вложенной страницы должны быть от корня
-    head = re.sub(r'(href|src)="(?!https?:|/|#|tel:|mailto:)', r'\1="/', head)
-    body = re.sub(r'(href|src)="(?!https?:|/|#|tel:|mailto:)', r'\1="/', body)
+    head, body = chrome()
 
     paras = '\n'.join(f'      <p class="about-text">{e(p)}</p>' for p in c['intro'])
 
@@ -192,6 +242,7 @@ def build(cat, items, siblings):
 </div>
 
 <script src="/catalog-page.js"></script>
+<script src="/consent.js"></script>
 </body>
 </html>
 '''
@@ -232,7 +283,7 @@ def catalog_html(d, by, chosen):
                     f' width="{w}" height="{h}" loading="lazy" decoding="async"></span>'
                     f'<span class="item-name">{name}</span></a>')
         else:
-            cards = [f'          <a class="item" href="/#calc"><span class="item-photo is-empty"'
+            cards = [f'          <a class="item" href="#contacts"><span class="item-photo is-empty"'
                      f' aria-hidden="true"></span><span class="item-name">{e(c["name"])}</span></a>'] * d['stubs']
         groups.append(f'      <section class="cat-group">\n'
                       f'        <h2>{e(c["name"])}{cnt}</h2>\n'
@@ -291,6 +342,14 @@ def main():
         else:
             f.write_text(page, encoding='utf-8'); written += 1
 
+    for doc in legal.DOCS:
+        f, page = ROOT / doc['file'], build_legal(doc)
+        if check:
+            if not f.exists() or f.read_text(encoding='utf-8') != page:
+                stale.append(doc['file'])
+        else:
+            f.write_text(page, encoding='utf-8')
+
     cat_page = catalog_html(d, by, chosen)
     cat_file = ROOT / 'catalog.html'
     if check:
@@ -305,7 +364,7 @@ def main():
         if stale or extra:
             print('страницы разошлись с данными:', ', '.join(stale + extra))
             return 1
-        print(f'страницы категорий и catalog.html актуальны ({len(chosen)})')
+        print(f'страницы категорий, catalog.html и документы актуальны ({len(chosen)})')
         return 0
 
     for p in extra:
