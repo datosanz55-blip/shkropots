@@ -922,7 +922,7 @@
     .featured{padding:10px 0 70px;}
     .foot-grid{grid-template-columns:1fr 1fr; gap:32px 24px;}
     .foot-cta{grid-column:1/-1;}
-    .foot-bottom{flex-direction:column; align-items:flex-start; gap:10px; padding-bottom:72px;}  /* не под круглой кнопкой звонка */
+    .foot-bottom{flex-direction:column; align-items:flex-start; gap:10px; padding-bottom:100px;}  /* не под круглой кнопкой звонка: 58px кнопка + 22px отступ + запас */
     .fab-call{display:flex;}
   }
   @media (max-width: 480px){
@@ -1094,6 +1094,7 @@
 
 /* ===== ДОКУМЕНТЫ В ПОДВАЛЕ ===== */
 .foot-legal{display:flex; flex-wrap:wrap; gap:6px 18px;}
+.foot-req{display:inline-block; margin-top:4px; font-size:12px; opacity:.85;}
 .foot-legal a, .foot-legal button{
   font:inherit; font-size:13px; color:var(--faint); background:none; border:0; padding:0;
   cursor:pointer; border-bottom:1px solid transparent; transition:color .2s ease, border-color .2s ease;
