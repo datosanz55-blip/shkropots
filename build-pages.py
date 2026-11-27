@@ -29,8 +29,7 @@ DOMAIN = 'https://shkrobotstudio.ru'
 def data():
     js = ('const fs=require("fs");'
           '(0,eval)(fs.readFileSync("catalog-data.js","utf8")+'
-          '";process.stdout.write(JSON.stringify({c:CATALOG_CATEGORIES,i:CATALOG_ITEMS,'
-          'stubs:CATALOG_PLACEHOLDERS_PER_CATEGORY}))")')
+          '";process.stdout.write(JSON.stringify({c:CATALOG_CATEGORIES,i:CATALOG_ITEMS}))")')
     r = subprocess.run(['node', '-e', js], cwd=ROOT, capture_output=True, text=True, check=True)
     return json.loads(r.stdout)
 
@@ -112,6 +111,13 @@ def build_legal(doc):
 '''
 
 
+def product_link(item):
+    photos = html.escape(json.dumps(['/' + photo for photo in item.get('photos', [])]))
+    description = html.escape(item.get('description', ''))
+    return (f'<a class="item" href="/{html.escape(item["img"])}" data-product'
+            f' data-photos="{photos}" data-description="{description}">')
+
+
 def build(cat, items, siblings):
     c = CONTENT[cat['id']]
     e = html.escape
@@ -125,7 +131,7 @@ def build(cat, items, siblings):
     def card(i):
         src = i.get("thumb") or i["img"]
         w, h = size(src)
-        return (f'      <a class="item lightbox-trigger" href="/{i["img"]}" data-full="/{i["img"]}">\n'
+        return (f'      {product_link(i)}\n'
                 f'        <span class="item-photo"><img src="/{src}"'
                 f' alt="{e(i["name"])} — ShkrobotS, Челябинск" width="{w}" height="{h}"'
                 f' loading="lazy" decoding="async"></span>\n'
@@ -234,13 +240,6 @@ def build(cat, items, siblings):
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
 </a>
 
-<div class="lightbox" id="lightbox">
-  <div class="lightbox-close" id="lightboxClose">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-  </div>
-  <img id="lightboxImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Просмотр фото">
-</div>
-
 <script src="/catalog-page.js"></script>
 <script src="/consent.js"></script>
 </body>
@@ -278,20 +277,19 @@ def catalog_html(d, by, chosen):
                 w, h = size(src)
                 name = e(i.get('name') or c['name'])
                 cards.append(
-                    f'          <a class="item lightbox-trigger" href="{i["img"]}" data-full="{i["img"]}">'
+                    f'          {product_link(i)}'
                     f'<span class="item-photo"><img src="{src}" alt="{name} — ShkrobotS, Челябинск"'
                     f' width="{w}" height="{h}" loading="lazy" decoding="async"></span>'
                     f'<span class="item-name">{name}</span></a>')
+            content = ('        <div class="item-grid">\n' + '\n'.join(cards) + '\n        </div>')
         else:
-            cards = [f'          <a class="item" href="#contacts"><span class="item-photo is-empty"'
-                     f' aria-hidden="true"></span><span class="item-name">{e(c["name"])}</span></a>'] * d['stubs']
+            content = '        <p class="cat-empty">Фото пока добавляем. <a href="#contacts">Обсудить проект</a></p>'
         groups.append(f'      <section class="cat-group">\n'
                       f'        <h2>{e(c["name"])}{cnt}</h2>\n'
-                      f'        <div class="item-grid">\n' + '\n'.join(cards) + '\n'
-                      f'        </div>\n      </section>')
+                      f'{content}\n      </section>')
 
     total = len(d['i'])
-    count = (f'В каталоге {total} {plural(total)} в {len(d["c"])} категориях' if total
+    count = (f'В каталоге {total} {plural(total)} в {len(by)} категориях' if total
              else f'Каталог наполняется — {len(d["c"])} категорий, фото добавляем')
 
     def put(t, begin, end, inner):

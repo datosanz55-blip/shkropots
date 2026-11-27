@@ -96,4 +96,19 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://shkrobotstudio.ru/catalog/beauty.html</loc>
+  </url>
+  <url>
+    <loc>https://shkrobotstudio.ru/catalog/computer-desks.html</loc>
+  </url>
+  <url>
+    <loc>https://shkrobotstudio.ru/catalog/consoles.html</loc>
+  </url>
+  <url>
+    <loc>https://shkrobotstudio.ru/catalog/kids.html</loc>
+  </url>
+  <url>
+    <loc>https://shkrobotstudio.ru/catalog/shoe-racks.html</loc>
+  </url>
 </urlset>

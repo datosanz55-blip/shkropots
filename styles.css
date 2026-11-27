@@ -295,7 +295,7 @@
   :root{
     --tex-bg:url('images/metal.jpg');
     --tex-accent:url('images/wood.jpg');
-    --dim-bg-mid:0.14;  --dim-bg-end:0.34;  --dim-bg-flat:0.18;
+    --dim-bg-mid:0.18;  --dim-bg-end:0.38;
     --dim-acc-a:0.78;   --dim-acc-b:0.88;
   }
   .page-bg{
@@ -310,7 +310,7 @@
       radial-gradient(130% 95% at 50% -6%, rgba(0,0,0,0) 0%,
                       rgba(0,0,0,var(--dim-bg-mid)) 62%,
                       rgba(0,0,0,var(--dim-bg-end)) 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,var(--dim-bg-flat)));
+      linear-gradient(180deg, rgba(0,0,0,0.58), rgba(0,0,0,0.68));
   }
   /* ===== АКЦЕНТНЫЕ СЕКЦИИ ===== */
   .accent-panel{
@@ -325,7 +325,7 @@
   }
   .accent-panel > *{position:relative; z-index:1;}
   /* Читаемость светлого текста поверх текстуры */
-  .hero-sub, .hero p.lead, .eyebrow, .hero-facts li,
+  .hero-sub, .hero p.lead, .hero-delivery, .hero-experience, .eyebrow, .hero-facts li,
   .calc-head h2, .calc-head p,
   .strip h2, .about-text,
   .featured-head h2,
@@ -377,24 +377,25 @@
   /* ===== HEADER ===== */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(18,20,23,0.72);
-    backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2);
-    border-bottom:1px solid var(--line);
+    --header-bg:#f5f1e9;
+    --header-ink:#211e1a;
+    --header-line:#d9d0c3;
+    background:var(--header-bg);
+    border-bottom:1px solid var(--header-line);
     transition:box-shadow .3s ease, border-color .3s ease;
   }
-  header.scrolled{box-shadow:0 10px 30px rgba(0,0,0,0.4); border-color:var(--line-strong);}
+  header.scrolled{box-shadow:0 10px 30px rgba(0,0,0,0.28);}
+  header :focus-visible{outline-color:#74532f;}
   .nav{
     display:flex; align-items:center; justify-content:space-between;
     padding:18px 32px;
     max-width:1240px; margin:0 auto;
   }
-  .logo{display:flex; align-items:center;}
-  /* Логотип — JPEG с белой графикой на тёмном фоне.
-     mix-blend-mode:screen убирает тёмную подложку на тёмной шапке.
-     При замене на PNG/SVG с прозрачностью — снять blend. */
+  .logo{display:flex; align-items:center; mix-blend-mode:multiply;}
+  /* Инверсия превращает светлый знак на тёмном JPEG в тёмный знак на белом. */
   .logo-img{
     height:54px; width:auto; display:block;
-    mix-blend-mode:screen;
+    filter:grayscale(1) invert(1) contrast(1.4);
     transition:opacity .3s var(--ease);
   }
   .logo:hover .logo-img{opacity:0.85;}
@@ -407,7 +408,7 @@
   }
   .burger span{
     display:block; height:2px; width:100%; border-radius:2px;
-    background:var(--ink);
+    background:var(--header-ink);
     transition:transform .3s var(--ease), opacity .2s ease;
   }
   .burger.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
@@ -417,9 +418,8 @@
     display:none; /* включается в мобильной медиа-запросе */
     position:absolute; top:100%; left:0; right:0; z-index:49;
     flex-direction:column;
-    background:rgba(16,13,11,0.97);
-    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-    border-bottom:1px solid var(--line);
+    background:var(--header-bg);
+    border-bottom:1px solid var(--header-line);
     box-shadow:0 18px 40px rgba(0,0,0,0.5);
     max-height:0; overflow:hidden; opacity:0; visibility:hidden;
     transition:max-height .35s var(--ease), opacity .25s ease,
@@ -427,8 +427,8 @@
   }
   .mobile-menu.open{max-height:80vh; opacity:1; visibility:visible; padding:8px 20px 22px;}
   .mobile-menu a{
-    font-size:17px; font-weight:500; color:var(--ink);
-    padding:14px 2px; border-bottom:1px solid var(--line);
+    font-size:17px; font-weight:500; color:var(--header-ink);
+    padding:14px 2px; border-bottom:1px solid var(--header-line);
   }
   .mobile-menu a:last-of-type{border-bottom:none;}
   .mobile-menu .btn{margin-top:16px; justify-content:center;}
@@ -437,10 +437,10 @@
     .burger span{transition:none;}
   }
   .navlinks{display:flex; gap:26px; font-size:15px; font-weight:500;}
-  .navlinks a{color:var(--ink); opacity:0.7; transition:opacity .2s; position:relative;}
+  .navlinks a{color:var(--header-ink); opacity:0.86; transition:opacity .2s; position:relative;}
   .navlinks a::after{
     content:''; position:absolute; left:0; bottom:-4px; width:0; height:1.5px;
-    background:var(--brass); transition:width .25s var(--ease);
+    background:#74532f; transition:width .25s var(--ease);
   }
   .navlinks a:hover{opacity:1;}
   .navlinks a:hover::after{width:100%;}
@@ -486,6 +486,8 @@
   }
   .eyebrow::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--brass); animation:pulse 2s ease-in-out infinite;}
   @keyframes pulse{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(1.6); opacity:.5;}}
+  .hero .eyebrow{margin-bottom:6px;}
+  .hero-delivery{font-size:14px; color:var(--ink); margin-bottom:18px;}
   .hero-sub{
     font-family:'Jost', system-ui, sans-serif; text-wrap:balance;  /* это <p>: H1 главной — строка над ним */
     font-size:clamp(30px, 3.6vw, 46px); line-height:1.0; font-weight:700;
@@ -493,20 +495,21 @@
   }
   /* Блок «о компании» в герое */
   .hero-facts{
-    display:flex; flex-wrap:wrap; gap:10px 22px; margin:0 0 26px;
+    display:flex; flex-wrap:wrap; gap:10px 22px; margin:0 0 16px;
     padding:0; list-style:none;
   }
   .hero-facts li{
     display:flex; align-items:center; gap:8px;
-    font-size:14px; color:var(--muted);
+    font-size:14px; color:var(--ink);
   }
   .hero-facts li::before{
     content:''; width:5px; height:5px; border-radius:50%;
     background:var(--brass); flex:none;
   }
   .hero p.lead{
-    font-size:17px; line-height:1.6; color:var(--muted); max-width:440px; margin-bottom:28px;
+    font-size:17px; line-height:1.6; color:var(--ink); max-width:520px; margin-bottom:16px;
   }
+  .hero-experience{font-size:15px; line-height:1.6; color:var(--ink); max-width:520px; margin-bottom:24px;}
   .hero-cta{display:flex; align-items:center; gap:20px;}
   .rating{font-size:14px; font-weight:600; color:var(--ink);}
   .rating .stars{color:var(--brass-bright); letter-spacing:2px; display:inline-block;}
@@ -705,6 +708,7 @@
     gap:56px; align-items:start;
   }
   .about-text{font-size:15.5px; line-height:1.7; color:var(--muted); margin-bottom:16px; max-width:520px;}
+  #about .about-text{color:var(--ink); font-size:16px;}
   .about-text:last-of-type{margin-bottom:28px;}
   .strip h2{font-size:38px; font-weight:700; margin-bottom:26px; color:var(--ink);}
   .strip-photo{border-radius:20px; overflow:hidden; aspect-ratio:1/1; cursor:pointer; border:1px solid var(--line);}
@@ -751,7 +755,6 @@
   .reviews{padding:100px 0;}
   .rev-head{text-align:center; max-width:620px; margin:0 auto 20px;}
   .rev-head h2{font-size:clamp(30px,3.6vw,42px); font-weight:700; margin-bottom:14px; color:var(--ink);}
-  /* Сводка рейтинга — единственный проверяемый факт в блоке */
   .rev-score{
     display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;
     margin:0 auto 44px; padding:18px 26px; width:fit-content;
@@ -760,11 +763,10 @@
   }
   .rev-score .num{font-family:'Jost'; font-weight:700; font-size:40px; line-height:1; color:var(--brass-bright);}
   .rev-score .stars{color:var(--brass-bright); letter-spacing:3px; font-size:15px;}
-  /* Половина звезды: рейтинг 4,3, рисовать пять полных — врать. */
   .stars .half{position:relative; color:rgba(238,221,191,0.28);}
   .stars .half::before{
     content:'★'; position:absolute; left:0; top:0;
-    width:.5em; overflow:hidden; color:var(--brass-bright);
+    width:50%; overflow:hidden; color:var(--brass-bright);
   }
   .rev-score .cap{font-size:13.5px; color:var(--muted); margin-top:4px;}
   .rev-score a{color:var(--brass-bright); border-bottom:1px solid rgba(238,221,191,0.4);}
@@ -1178,3 +1180,45 @@
   .legal-table tr:last-child td{border-bottom:1px solid var(--line);}
   .legal-table td:last-child{border-bottom:0;}
 }
+
+/* Карточка изделия в каталоге */
+body.product-dialog-open{overflow:hidden;}
+.product-dialog{
+  width:min(920px, calc(100% - 24px)); max-height:calc(100% - 24px);
+  margin:auto; padding:clamp(16px, 4vw, 36px);
+  background:var(--surface); color:var(--ink);
+  border:1px solid var(--line-strong); border-radius:16px;
+}
+.product-dialog::backdrop{background:rgba(0,0,0,.76);}
+.product-dialog-close{display:flex; justify-content:flex-end; margin-bottom:10px;}
+.product-dialog-close button, .product-thumbs button{
+  background:transparent; color:inherit; border:1px solid var(--line-strong);
+  cursor:pointer; border-radius:8px;
+}
+.product-dialog-close button{width:44px; height:44px; font-size:26px;}
+.product-detail{display:grid; grid-template-columns:minmax(0, 3fr) minmax(0, 2fr); gap:24px;}
+.product-detail h2{font-size:clamp(24px, 3vw, 36px); margin:0 0 16px;}
+.product-photo{width:100%; height:min(54vh, 500px); object-fit:contain; background:var(--bg); border-radius:8px;}
+.product-description{line-height:1.65; margin-bottom:24px;}
+.product-thumbs:not([hidden]){display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+.product-thumbs button{width:64px; height:54px; padding:2px;}
+.product-thumbs button[aria-pressed="true"]{border-color:var(--brass-bright);}
+.product-thumbs img{width:100%; height:100%; object-fit:cover; border-radius:5px;}
+.cat-empty{color:var(--muted); padding:16px 0;}
+.cat-empty a{color:var(--brass-bright); text-decoration:underline;}
+@media (max-width:640px){
+  .product-detail{grid-template-columns:1fr; gap:16px;}
+  .product-photo{height:min(38vh, 340px);}
+}
+
+.materials, .directions{scroll-margin-top:110px;}
+.materials-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap:18px;}
+.materials-grid > div{padding:22px; background:var(--surface); border:1px solid var(--line); border-radius:12px;}
+.materials-grid h3{font-size:21px; margin-bottom:8px;}
+.materials-grid p, .directions p{font-size:15px; line-height:1.65; color:var(--ink);}
+.directions{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  gap:18px 32px; margin-bottom:42px; padding:0 0 32px; border-bottom:1px solid var(--line-strong);
+}
+.directions h2{font-size:clamp(27px, 4vw, 36px); margin-bottom:8px;}
+.directions p a{color:var(--brass-bright); text-decoration:underline;}
