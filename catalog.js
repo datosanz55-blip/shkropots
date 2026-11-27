@@ -8,16 +8,6 @@
   var listEl   = document.getElementById('catResults');
   if (!filterEl || !listEl) return;
 
-  /* Позиции + заглушки: пока фото не пришли, показываем каркас категории,
-     чтобы страница не выглядела пустой. */
-  function itemsFor(catId) {
-    var real = CATALOG_ITEMS.filter(function (i) { return i.cat === catId; });
-    if (real.length) return real;
-    var stub = [];
-    for (var k = 0; k < CATALOG_PLACEHOLDERS_PER_CATEGORY; k++) stub.push({ cat: catId, name: '', img: null });
-    return stub;
-  }
-
   function plural(n, one, few, many) {
     var n10 = n % 10, n100 = n % 100;
     if (n10 === 1 && n100 !== 11) return one;
@@ -28,21 +18,24 @@
   function buildCard(item, catName) {
     var a = document.createElement('a');
     a.className = 'item';
-    a.href = '#contacts';
-    if (item.img) {
-      a.className += ' lightbox-trigger';
-      a.href = item.img;  // без JS ссылка просто откроет фото
-      a.setAttribute('data-full', item.img);
-      // в сетке — лёгкое превью, в лайтбокс уходит крупное
-      a.innerHTML =
-        '<span class="item-photo"><img src="' + (item.thumb || item.img) + '" alt="' +
-        (item.name || catName) + ' — ShkrobotS, Челябинск" loading="lazy" decoding="async"></span>' +
-        '<span class="item-name">' + (item.name || catName) + '</span>';
-    } else {
-      a.innerHTML =
-        '<span class="item-photo is-empty" aria-hidden="true"></span>' +
-        '<span class="item-name">' + catName + '</span>';
-    }
+    a.href = '/' + item.img;
+    a.setAttribute('data-product', '');
+    a.dataset.photos = JSON.stringify((item.photos || []).map(function (photo) { return '/' + photo; }));
+    if (item.description) a.dataset.description = item.description;
+
+    var photo = document.createElement('span');
+    photo.className = 'item-photo';
+    var img = document.createElement('img');
+    img.src = item.thumb || item.img;
+    img.alt = (item.name || catName) + ' — ShkrobotS, Челябинск';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    photo.appendChild(img);
+
+    var name = document.createElement('span');
+    name.className = 'item-name';
+    name.textContent = item.name || catName;
+    a.append(photo, name);
     return a;
   }
 
@@ -55,8 +48,8 @@
     var shown = 0;
 
     cats.forEach(function (c) {
-      var items = itemsFor(c.id);
-      var real = CATALOG_ITEMS.filter(function (i) { return i.cat === c.id; }).length;
+      var items = CATALOG_ITEMS.filter(function (i) { return i.cat === c.id; });
+      var real = items.length;
       shown += real;
 
       var group = document.createElement('section');
@@ -72,10 +65,20 @@
       }
       group.appendChild(h);
 
-      var grid = document.createElement('div');
-      grid.className = 'item-grid';
-      items.forEach(function (i) { grid.appendChild(buildCard(i, c.name)); });
-      group.appendChild(grid);
+      if (real) {
+        var grid = document.createElement('div');
+        grid.className = 'item-grid';
+        items.forEach(function (i) { grid.appendChild(buildCard(i, c.name)); });
+        group.appendChild(grid);
+      } else {
+        var empty = document.createElement('p');
+        empty.className = 'cat-empty';
+        var contact = document.createElement('a');
+        contact.href = '#contacts';
+        contact.textContent = 'Обсудить проект';
+        empty.append('Фото пока добавляем. ', contact);
+        group.appendChild(empty);
+      }
       frag.appendChild(group);
     });
 
@@ -86,13 +89,12 @@
     countEl.textContent = activeId === 'all'
       ? (total
           ? 'В каталоге ' + total + ' ' + plural(total, 'изделие', 'изделия', 'изделий') +
-            ' в ' + CATALOG_CATEGORIES.length + ' категориях'
+            ' в ' + CATALOG_CATEGORIES.filter(function (c) { return CATALOG_ITEMS.some(function (i) { return i.cat === c.id; }); }).length + ' категориях'
           : 'Каталог наполняется — ' + CATALOG_CATEGORIES.length + ' категорий, фото добавляем')
       : (shown
           ? shown + ' ' + plural(shown, 'изделие', 'изделия', 'изделий') + ' в категории'
           : 'В этой категории фото пока добавляем');
 
-    bindLightbox();
   }
 
   /* Фильтр */
@@ -138,55 +140,6 @@
     }
   }
 
-  /* Лайтбокс — те же классы, что на главной */
-  var lightbox = document.getElementById('lightbox');
-  var lightboxImg = document.getElementById('lightboxImg');
-
-  function closeLightbox() {
-    lightbox.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function bindLightbox() {
-    listEl.querySelectorAll('.lightbox-trigger').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        e.preventDefault();
-        lightboxImg.src = el.getAttribute('data-full');
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-  }
-  if (lightbox) {
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
-  }
-
-  /* Мобильное меню и шапка — как на главной */
-  var header = document.getElementById('siteHeader');
-  document.addEventListener('scroll', function () {
-    header.classList.toggle('scrolled', document.documentElement.scrollTop > 20);
-  }, { passive: true });
-
-  var burger = document.getElementById('burger');
-  var menu = document.getElementById('mobileMenu');
-  function setMenu(open) {
-    menu.classList.toggle('open', open);
-    burger.classList.toggle('is-open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
-  }
-  if (burger && menu) {
-    burger.addEventListener('click', function () { setMenu(!menu.classList.contains('open')); });
-    menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
-    window.addEventListener('resize', function () { if (window.innerWidth > 860) setMenu(false); });
-  }
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    closeLightbox();
-    if (menu) setMenu(false);
-  });
-
-
   /* Старт: категория может прийти адресом catalog.html#beds */
   buildFilter();
   var fromHash = location.hash.replace('#', '');
@@ -195,8 +148,7 @@
   // только лишняя работа. Рисуем сами, лишь если пришли по адресу категории
   // или разметки почему-то нет.
   if (valid) select(fromHash, false);
-  else if (listEl.querySelector('.cat-group')) bindLightbox();
-  else select('all', false);
+  else if (!listEl.querySelector('.cat-group')) select('all', false);
   window.addEventListener('hashchange', function () {
     var id = location.hash.replace('#', '');
     select(CATALOG_CATEGORIES.some(function (c) { return c.id === id; }) ? id : 'all', false);

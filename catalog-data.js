@@ -3,8 +3,7 @@
    карточка появилась и в каталоге, и в фильтре. Трогать catalog.html не нужно.
 
    Категория: { id, name }         id — часть адреса: catalog.html#beds
-   Позиция:   { cat, name, img }   img — путь к фото; без него карточка
-                                   рисуется текстурной заглушкой.        */
+   Позиция:   { cat, name, img }   img — путь к основному фото.        */
 
 const CATALOG_CATEGORIES = [
   { id: 'dining-tables',  name: 'Столы обеденные' },
@@ -29,13 +28,24 @@ const CATALOG_CATEGORIES = [
   { id: 'retail',         name: 'Торговое оборудование' },
   { id: 'partitions',     name: 'Перегородки и рейки' },
   { id: 'outdoor',        name: 'Уличная мебель' },
-  { id: 'glamping',       name: 'Мебель для глэмпинга и баз отдыха' }
+  { id: 'glamping',       name: 'Мебель для глэмпинга и баз отдыха' },
+  { id: 'loft-mirrors', name: 'Зеркала лофт' },
+  { id: 'window-workspaces', name: 'Рабочая зона у окна' },
+  { id: 'stairs-railings', name: 'Лестницы и ограждения' },
+  { id: 'slat-partitions', name: 'Реечные перегородки' },
+  { id: 'custom-cabinet-furniture', name: 'Корпусная мебель на заказ' },
+  { id: 'under-stairs', name: 'Организация подлестничного пространства' },
+  { id: 'window-trim', name: 'Подоконники и откосы из массива и шпона' },
+  { id: 'round-dining-tables', name: 'Круглые обеденные столы' },
+  { id: 'outdoor-kitchens', name: 'Уличные кухни' },
+  { id: 'grill-areas', name: 'Мангальные зоны' }
 ];
 
 /* Позиции каталога.
    img   — крупное фото для лайтбокса (до 1600 px)
    thumb — превью для сетки (до 700 px); если не задан, берётся img
-   Категории без позиций рисуются текстурными заглушками. */
+   photos — дополнительные фотографии того же изделия
+   description — описание изделия, если оно известно. */
 const CATALOG_ITEMS = [
   // Уличная мебель — снято раньше, отдельными кадрами
   { cat: 'outdoor',        name: 'Комплект для террасы',                              img: 'images/terrace-pool.jpg' },
@@ -95,9 +105,8 @@ const CATALOG_ITEMS = [
   { cat: 'tv-units',      name: 'Тумба под ТВ, металл и массив',                           img: 'images/catalog/tv-units-02.jpg',          thumb: 'images/catalog/thumb/tv-units-02.jpg' },
 
   // shelving
-  { cat: 'shelving',      name: 'Стеллаж из металла и массива',                            img: 'images/catalog/shelving-01.jpg',          thumb: 'images/catalog/thumb/shelving-01.jpg' },
+  { cat: 'shelving',      name: 'Стеллаж из металла и массива',                            img: 'images/catalog/shelving-01.jpg',          thumb: 'images/catalog/thumb/shelving-01.jpg', photos: ['images/catalog/shelving-03.jpg'], description: 'Стеллаж из металла и массива. В открытых секциях — деревянные полки, в закрытой секции — деревянные фасады.' },
   { cat: 'shelving',      name: 'Комплект стеллажей',                                      img: 'images/catalog/shelving-02.jpg',          thumb: 'images/catalog/thumb/shelving-02.jpg' },
-  { cat: 'shelving',      name: 'Стеллаж комбинированный',                                 img: 'images/catalog/shelving-03.jpg',          thumb: 'images/catalog/thumb/shelving-03.jpg' },
 
   // office
   { cat: 'office',        name: 'Рабочий стол на металлокаркасе · Проект Алое Поле',       img: 'images/catalog/office-01.jpg',            thumb: 'images/catalog/thumb/office-01.jpg' },
@@ -162,7 +171,7 @@ const CATALOG_ITEMS = [
 
   // Мебель для кафе, баров и ресторанов — партия 3
   { cat: 'horeca',          name: 'Лестница с ограждением для бара',                          img: 'images/catalog/horeca-01.jpg',      thumb: 'images/catalog/thumb/horeca-01.jpg' },
-  { cat: 'horeca',          name: 'Металлическая лестница лофт',                              img: 'images/catalog/horeca-02.jpg',      thumb: 'images/catalog/thumb/horeca-02.jpg' },
+  { cat: 'stairs-railings',          name: 'Металлическая лестница лофт',                              img: 'images/catalog/horeca-02.jpg',      thumb: 'images/catalog/thumb/horeca-02.jpg' },
   { cat: 'horeca',          name: 'Диванная зона кафе',                                       img: 'images/catalog/horeca-03.jpg',      thumb: 'images/catalog/thumb/horeca-03.jpg' },
   { cat: 'horeca',          name: 'Стол на рифлёном подстолье',                               img: 'images/catalog/horeca-04.jpg',      thumb: 'images/catalog/thumb/horeca-04.jpg' },
   { cat: 'horeca',          name: 'Посадочная зона у окна',                                   img: 'images/catalog/horeca-05.jpg',      thumb: 'images/catalog/thumb/horeca-05.jpg' },
@@ -256,15 +265,9 @@ const CATALOG_ITEMS = [
   { cat: 'kitchens',        name: 'Кухонный блок с навесными полками',                        img: 'images/catalog/kitchens-12.jpg',      thumb: 'images/catalog/thumb/kitchens-12.jpg' },
 
   // Тумбы под раковину и стиральную машину — партия 3
-  { cat: 'bathroom',        name: 'Тумба под две раковины',                                   img: 'images/catalog/bathroom-01.jpg',      thumb: 'images/catalog/thumb/bathroom-01.jpg' },
-  { cat: 'bathroom',        name: 'Тумба с полкой для полотенец',                             img: 'images/catalog/bathroom-02.jpg',      thumb: 'images/catalog/thumb/bathroom-02.jpg' },
-  { cat: 'bathroom',        name: 'Столешница из массива под раковины',                       img: 'images/catalog/bathroom-03.jpg',      thumb: 'images/catalog/thumb/bathroom-03.jpg' },
-  { cat: 'bathroom',        name: 'Тумба в санузел на металлокаркасе',                        img: 'images/catalog/bathroom-04.jpg',      thumb: 'images/catalog/thumb/bathroom-04.jpg' },
-  { cat: 'bathroom',        name: 'Двойная раковина на деревянной столешнице',                img: 'images/catalog/bathroom-05.jpg',      thumb: 'images/catalog/thumb/bathroom-05.jpg' },
-  { cat: 'bathroom',        name: 'Тумба под раковину в санузел',                             img: 'images/catalog/bathroom-06.jpg',      thumb: 'images/catalog/thumb/bathroom-06.jpg' },
-  { cat: 'bathroom',        name: 'Тумба с распашными дверями под раковину',                  img: 'images/catalog/bathroom-07.jpg',      thumb: 'images/catalog/thumb/bathroom-07.jpg' },
+  { cat: 'bathroom',        name: 'Тумба под две раковины',                                   img: 'images/catalog/bathroom-01.jpg',      thumb: 'images/catalog/thumb/bathroom-01.jpg', photos: ['images/catalog/bathroom-02.jpg', 'images/catalog/bathroom-03.jpg', 'images/catalog/bathroom-04.jpg', 'images/catalog/bathroom-05.jpg'], description: 'Тумба с деревянной столешницей под две накладные раковины. Внизу — открытая полка для хранения.' },
   { cat: 'bathroom',        name: 'Консоль под раковину',                                     img: 'images/catalog/bathroom-08.jpg',      thumb: 'images/catalog/thumb/bathroom-08.jpg' },
-  { cat: 'bathroom',        name: 'Тумба под раковину из массива',                            img: 'images/catalog/bathroom-09.jpg',      thumb: 'images/catalog/thumb/bathroom-09.jpg' },
+  { cat: 'bathroom',        name: 'Тумба под раковину из массива',                            img: 'images/catalog/bathroom-09.jpg',      thumb: 'images/catalog/thumb/bathroom-09.jpg', description: 'Тумба из массива с распашными дверцами и накладной раковиной.' },
   { cat: 'bathroom',        name: 'Рифлёная тумба под две раковины',                          img: 'images/catalog/bathroom-10.jpg',      thumb: 'images/catalog/thumb/bathroom-10.jpg' },
 
   // Прихожие лофт — партия 3
@@ -291,13 +294,11 @@ const CATALOG_ITEMS = [
   // Тумбы под ТВ — партия 3
   { cat: 'tv-units',        name: 'Тумба под ТВ с винной секцией',                            img: 'images/catalog/tv-units-03.jpg',      thumb: 'images/catalog/thumb/tv-units-03.jpg' },
   { cat: 'tv-units',        name: 'Комод под телевизор',                                      img: 'images/catalog/tv-units-04.jpg',      thumb: 'images/catalog/thumb/tv-units-04.jpg' },
-  { cat: 'tv-units',        name: 'ТВ-зона со стеллажом и тумбой',                            img: 'images/catalog/tv-units-05.jpg',      thumb: 'images/catalog/thumb/tv-units-05.jpg' },
 
   // Стеллажи — партия 3
   { cat: 'shelving',        name: 'Стеллаж с деревянными полками',                            img: 'images/catalog/shelving-04.jpg',      thumb: 'images/catalog/thumb/shelving-04.jpg' },
   { cat: 'shelving',        name: 'Стеллаж на металлокаркасе',                                img: 'images/catalog/shelving-05.jpg',      thumb: 'images/catalog/thumb/shelving-05.jpg' },
-  { cat: 'shelving',        name: 'Стеллаж с дровницей',                                      img: 'images/catalog/shelving-06.jpg',      thumb: 'images/catalog/thumb/shelving-06.jpg' },
-  { cat: 'shelving',        name: 'Стеллаж-дровница',                                         img: 'images/catalog/shelving-07.jpg',      thumb: 'images/catalog/thumb/shelving-07.jpg' },
+  { cat: 'shelving',        name: 'Стеллаж-дровница',                                         img: 'images/catalog/shelving-07.jpg',      thumb: 'images/catalog/thumb/shelving-07.jpg', description: 'Стеллаж с открытыми полками и нижней секцией для хранения дров.' },
   { cat: 'shelving',        name: 'Настенный стеллаж лофт',                                   img: 'images/catalog/shelving-08.jpg',      thumb: 'images/catalog/thumb/shelving-08.jpg' },
 
   // Мебель для глэмпинга и баз отдыха — партия 3
@@ -355,7 +356,3 @@ const CATALOG_ITEMS = [
   // Мебель для офиса — партия 3
   { cat: 'office',          name: 'Рабочее место с угловым столом',                           img: 'images/catalog/office-42.jpg',      thumb: 'images/catalog/thumb/office-42.jpg' },
 ];
-
-/* Пока позиций нет — показываем по столько заглушек на категорию,
-   чтобы каркас каталога был виден. Поставить 0, когда наполнится. */
-const CATALOG_PLACEHOLDERS_PER_CATEGORY = 3;
