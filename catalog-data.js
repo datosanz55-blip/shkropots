@@ -48,9 +48,9 @@ const CATALOG_CATEGORIES = [
    description — описание изделия, если оно известно. */
 const CATALOG_ITEMS = [
   // Уличная мебель — снято раньше, отдельными кадрами
-  { cat: 'outdoor',        name: 'Комплект для террасы',                              img: 'images/terrace-pool.jpg' },
-  { cat: 'outdoor',        name: 'Комплект для беседки',                              img: 'images/gazebo-tent.jpg' },
-  { cat: 'outdoor',        name: 'Уличный комплект на заказ',                         img: 'images/terrace-balcony.jpg' },
+  { cat: 'outdoor',        name: 'Комплект мебели для террасы «Гранд»',                              img: 'images/terrace-pool.jpg', description: 'Угловой диван, 2 кресла и стол. Изготовим комплект по вашим размерам в любом цвете из палитры.' },
+  { cat: 'outdoor',        name: 'Комплект мебели для беседки «Амальфи»',                              img: 'images/gazebo-tent.jpg', description: 'Угловой диван, 3 кресла и стол. Изготовим комплект по вашим размерам в любом цвете из палитры.' },
+  { cat: 'outdoor',        name: 'Уличный комплект мебели «Белладжио»',                         img: 'images/terrace-balcony.jpg', description: 'Угловой диван, 2 кресла и стол. Изготовим комплект по вашим размерам в любом цвете из палитры.' },
 
   // Уличная мебель — партия 2, реальные объекты заказчиков
   { cat: 'outdoor',       name: 'Угловой диван с журнальным столом',                              img: 'images/catalog/outdoor-01.jpg',         thumb: 'images/catalog/thumb/outdoor-01.jpg' },
