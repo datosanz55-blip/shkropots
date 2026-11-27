@@ -325,7 +325,7 @@
   }
   .accent-panel > *{position:relative; z-index:1;}
   /* Читаемость светлого текста поверх текстуры */
-  .hero-sub, .hero p.lead, .eyebrow, .hero-facts li,
+  .hero-sub, .hero p.lead, .hero-delivery, .hero-experience, .eyebrow, .hero-facts li,
   .calc-head h2, .calc-head p,
   .strip h2, .about-text,
   .featured-head h2,
@@ -486,6 +486,8 @@
   }
   .eyebrow::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--brass); animation:pulse 2s ease-in-out infinite;}
   @keyframes pulse{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(1.6); opacity:.5;}}
+  .hero .eyebrow{margin-bottom:6px;}
+  .hero-delivery{font-size:14px; color:var(--ink); margin-bottom:18px;}
   .hero-sub{
     font-family:'Jost', system-ui, sans-serif; text-wrap:balance;  /* это <p>: H1 главной — строка над ним */
     font-size:clamp(30px, 3.6vw, 46px); line-height:1.0; font-weight:700;
@@ -493,20 +495,21 @@
   }
   /* Блок «о компании» в герое */
   .hero-facts{
-    display:flex; flex-wrap:wrap; gap:10px 22px; margin:0 0 26px;
+    display:flex; flex-wrap:wrap; gap:10px 22px; margin:0 0 16px;
     padding:0; list-style:none;
   }
   .hero-facts li{
     display:flex; align-items:center; gap:8px;
-    font-size:14px; color:var(--muted);
+    font-size:14px; color:var(--ink);
   }
   .hero-facts li::before{
     content:''; width:5px; height:5px; border-radius:50%;
     background:var(--brass); flex:none;
   }
   .hero p.lead{
-    font-size:17px; line-height:1.6; color:var(--muted); max-width:440px; margin-bottom:28px;
+    font-size:17px; line-height:1.6; color:var(--ink); max-width:520px; margin-bottom:16px;
   }
+  .hero-experience{font-size:15px; line-height:1.6; color:var(--ink); max-width:520px; margin-bottom:24px;}
   .hero-cta{display:flex; align-items:center; gap:20px;}
   .rating{font-size:14px; font-weight:600; color:var(--ink);}
   .rating .stars{color:var(--brass-bright); letter-spacing:2px; display:inline-block;}
