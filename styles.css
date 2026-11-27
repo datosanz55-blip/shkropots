@@ -749,7 +749,8 @@
   .product-card:hover .arrow{background:var(--brass); border-color:var(--brass); transform:rotate(45deg);}
   .product-card:hover .arrow svg{color:var(--on-brass);}
   .product-info .price{color:var(--brass-bright); font-weight:700; font-size:15px; font-variant-numeric:tabular-nums;}
-  .product-info .desc{color:var(--muted); font-size:13px; margin-top:4px;}
+  .product-info .desc{color:var(--ink); font-size:14px; margin-top:4px;}
+  .product-info .set-note{color:var(--muted); font-size:13px; line-height:1.5; margin-top:8px;}
 
   /* ===== ОТЗЫВЫ ===== */
   .reviews{padding:100px 0;}
@@ -1202,7 +1203,7 @@ body.product-dialog-open{overflow:hidden;}
 .product-dialog-close button{width:44px; height:44px; font-size:26px;}
 .product-detail{display:grid; grid-template-columns:minmax(0, 3fr) minmax(0, 2fr); gap:24px;}
 .product-detail h2{font-size:clamp(24px, 3vw, 36px); margin:0 0 16px;}
-.product-photo{width:100%; height:min(54vh, 500px); object-fit:contain; background:var(--bg); border-radius:8px;}
+.product-dialog .product-photo{width:100%; height:min(54vh, 500px); object-fit:contain; background:var(--bg); border-radius:8px;}
 .product-description{line-height:1.65; margin-bottom:24px;}
 .product-thumbs:not([hidden]){display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
 .product-thumbs button{width:64px; height:54px; padding:2px;}
@@ -1212,7 +1213,7 @@ body.product-dialog-open{overflow:hidden;}
 .cat-empty a{color:var(--brass-bright); text-decoration:underline;}
 @media (max-width:640px){
   .product-detail{grid-template-columns:1fr; gap:16px;}
-  .product-photo{height:min(38vh, 340px);}
+  .product-dialog .product-photo{height:min(38vh, 340px);}
 }
 
 .materials, .directions{scroll-margin-top:110px;}
