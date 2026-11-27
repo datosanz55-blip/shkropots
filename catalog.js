@@ -20,7 +20,8 @@
     a.className = 'item';
     a.href = '/' + item.img;
     a.setAttribute('data-product', '');
-    a.dataset.photos = JSON.stringify((item.photos || []).map(function (photo) { return '/' + photo; }));
+    var photos = item.photos || [];
+    a.dataset.photos = JSON.stringify(photos.map(function (photo) { return '/' + photo; }));
     if (item.description) a.dataset.description = item.description;
 
     var photo = document.createElement('span');
@@ -31,6 +32,12 @@
     img.loading = 'lazy';
     img.decoding = 'async';
     photo.appendChild(img);
+    if (photos.length) {
+      var count = document.createElement('span');
+      count.className = 'item-photo-count';
+      count.textContent = (photos.length + 1) + ' фото';
+      photo.appendChild(count);
+    }
 
     var name = document.createElement('span');
     name.className = 'item-name';

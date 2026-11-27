@@ -118,6 +118,11 @@ def product_link(item):
             f' data-photos="{photos}" data-description="{description}">')
 
 
+def photo_count(item):
+    count = 1 + len(item.get('photos', []))
+    return f'<span class="item-photo-count">{count} фото</span>' if count > 1 else ''
+
+
 def build(cat, items, siblings):
     c = CONTENT[cat['id']]
     e = html.escape
@@ -134,7 +139,7 @@ def build(cat, items, siblings):
         return (f'      {product_link(i)}\n'
                 f'        <span class="item-photo"><img src="/{src}"'
                 f' alt="{e(i["name"])} — ShkrobotS, Челябинск" width="{w}" height="{h}"'
-                f' loading="lazy" decoding="async"></span>\n'
+                f' loading="lazy" decoding="async">{photo_count(i)}</span>\n'
                 f'        <span class="item-name">{e(i["name"])}</span>\n'
                 f'      </a>')
     cards = '\n'.join(card(i) for i in items)
@@ -279,7 +284,7 @@ def catalog_html(d, by, chosen):
                 cards.append(
                     f'          {product_link(i)}'
                     f'<span class="item-photo"><img src="{src}" alt="{name} — ShkrobotS, Челябинск"'
-                    f' width="{w}" height="{h}" loading="lazy" decoding="async"></span>'
+                    f' width="{w}" height="{h}" loading="lazy" decoding="async">{photo_count(i)}</span>'
                     f'<span class="item-name">{name}</span></a>')
             content = ('        <div class="item-grid">\n' + '\n'.join(cards) + '\n        </div>')
         else:

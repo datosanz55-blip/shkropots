@@ -243,12 +243,10 @@ const CATALOG_ITEMS = [
   { cat: 'education',       name: 'Компьютерные столы в ряд',                                 img: 'images/catalog/education-04.jpg',      thumb: 'images/catalog/thumb/education-04.jpg' },
   { cat: 'education',       name: 'Учебное место с металлокаркасом',                          img: 'images/catalog/education-05.jpg',      thumb: 'images/catalog/thumb/education-05.jpg' },
   { cat: 'education',       name: 'Стол для аудитории',                                       img: 'images/catalog/education-06.jpg',      thumb: 'images/catalog/thumb/education-06.jpg' },
-  { cat: 'education',       name: 'Стеллаж с ячейками и тумбами',                             img: 'images/catalog/education-07.jpg',      thumb: 'images/catalog/thumb/education-07.jpg' },
-  { cat: 'education',       name: 'Стеллаж для учебных пособий',                              img: 'images/catalog/education-08.jpg',      thumb: 'images/catalog/thumb/education-08.jpg' },
+  { cat: 'education',       name: 'Стеллаж с ячейками и тумбами',                             img: 'images/catalog/education-07.jpg',      thumb: 'images/catalog/thumb/education-07.jpg', photos: ['images/catalog/education-08.jpg'], description: 'Стеллаж для учебных пособий с открытыми ячейками и закрытыми нижними секциями.' },
   { cat: 'education',       name: 'Переговорный стол для аудитории',                          img: 'images/catalog/education-09.jpg',      thumb: 'images/catalog/thumb/education-09.jpg' },
-  { cat: 'education',       name: 'Тумба под телевизор для аудитории',                        img: 'images/catalog/education-10.jpg',      thumb: 'images/catalog/thumb/education-10.jpg' },
+  { cat: 'education',       name: 'Тумба под телевизор для аудитории',                        img: 'images/catalog/education-10.jpg',      thumb: 'images/catalog/thumb/education-10.jpg', photos: ['images/catalog/education-12.jpg'], description: 'Тумба с распашными дверцами под настенным телевизором в аудитории.' },
   { cat: 'education',       name: 'Стол для семинаров',                                       img: 'images/catalog/education-11.jpg',      thumb: 'images/catalog/thumb/education-11.jpg' },
-  { cat: 'education',       name: 'Тумба с распашными дверями',                               img: 'images/catalog/education-12.jpg',      thumb: 'images/catalog/thumb/education-12.jpg' },
 
   // Кухни встроенные — партия 3
   { cat: 'kitchens',        name: 'Кухня с деревянной столешницей',                           img: 'images/catalog/kitchens-01.jpg',      thumb: 'images/catalog/thumb/kitchens-01.jpg' },
