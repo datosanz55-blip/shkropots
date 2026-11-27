@@ -1210,3 +1210,15 @@ body.product-dialog-open{overflow:hidden;}
   .product-detail{grid-template-columns:1fr; gap:16px;}
   .product-photo{height:min(38vh, 340px);}
 }
+
+.materials, .directions{scroll-margin-top:110px;}
+.materials-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap:18px;}
+.materials-grid > div{padding:22px; background:var(--surface); border:1px solid var(--line); border-radius:12px;}
+.materials-grid h3{font-size:21px; margin-bottom:8px;}
+.materials-grid p, .directions p{font-size:15px; line-height:1.65; color:var(--ink);}
+.directions{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  gap:18px 32px; margin-bottom:42px; padding:0 0 32px; border-bottom:1px solid var(--line-strong);
+}
+.directions h2{font-size:clamp(27px, 4vw, 36px); margin-bottom:8px;}
+.directions p a{color:var(--brass-bright); text-decoration:underline;}
